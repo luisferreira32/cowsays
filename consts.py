@@ -12,3 +12,31 @@ PAGE_SHOW_THE_ANIMAL_RECORDING = 0
 PAGE_SHOW_THE_ANIMAL_SCORE = 1
 
 FONT = pg.font.SysFont("Mono", 50)
+
+
+
+ANIMALS = [
+    "chicken",
+    "cow",
+    "dog",
+    "cat",
+    "elephant",
+    "seal",
+    "giraffe", 
+    "orca",
+    "human",
+    "seagull",
+    ]
+
+ANIMAL_WAVS = {
+    "chicken": "TODO.wav",
+    "cow": "TODO.wav",
+    "dog": "TODO.wav",
+    "cat": "TODO.wav",
+    "elephant": "TODO.wav",
+    "seal": "TODO.wav",
+    "giraffe": "TODO.wav",
+    "orca": "TODO.wav",
+    "human": "TODO.wav",
+    "seagull": "TODO.wav",
+}
