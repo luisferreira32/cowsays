@@ -121,8 +121,7 @@ class ScorePage:
         elif (event.type == pg.MOUSEBUTTONUP and self.quit_button_pressed == True) or (event.type == pg.KEYUP and event.key == pg.K_ESCAPE):
             self.quit_button_pressed = False
             global_game_state.score = 0
-            # TODO: go back to main menu
-            global_game_state.current_page = consts.PAGE_SHOW_THE_ANIMAL_RECORDING
+            global_game_state.current_page = consts.PAGE_MAIN_MENU
         elif (event.type == pg.MOUSEBUTTONUP and self.next_button_pressed == True) or (event.type == pg.KEYUP and event.key == pg.K_SPACE):
             self.next_button_pressed = False
             if global_game_state.current_evaluation >= 60:
