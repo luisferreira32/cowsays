@@ -3,8 +3,17 @@ from pygame._sdl2 import (
     get_audio_device_names,
     AudioDevice,
     AUDIO_F32,
-    AUDIO_ALLOW_FORMAT_CHANGE,
+    AUDIO_ALLOW_ANY_CHANGE,
 )
+
+RECORDER_FREQUENCY = 44100
+NUM_CHANNELS = 2
+CHUNK_SIZE = 512
+
+
+def filter_sound(s: pg.mixer.Sound) -> pg.mixer.Sound:
+    return s
+
 
 class Recorder:
     def __init__(self):
@@ -17,11 +26,11 @@ class Recorder:
         self.audio_device = AudioDevice(
             devicename=names[0],
             iscapture=True,
-            frequency=44100,
+            frequency=RECORDER_FREQUENCY,
             audioformat=AUDIO_F32,
-            numchannels=2,
-            chunksize=512,
-            allowed_changes=AUDIO_ALLOW_FORMAT_CHANGE,
+            numchannels=NUM_CHANNELS,
+            chunksize=CHUNK_SIZE,
+            allowed_changes=AUDIO_ALLOW_ANY_CHANGE,
             callback=callback,
         )
         self.recording = False
@@ -41,4 +50,4 @@ class Recorder:
         self.audio_device.pause(1)
 
     def mix_sound(self) -> pg.mixer.Sound:
-        return pg.mixer.Sound(buffer=b"".join(self.sound_chunks))
+        return filter_sound(pg.mixer.Sound(buffer=b"".join(self.sound_chunks)))

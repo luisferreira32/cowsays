@@ -7,8 +7,8 @@ pg.init()
 import consts
 from animal import Animal
 from recorder import Recorder
-from gamestate import GameState
-from pages import handle_event, draw_page_map
+from gamestate import GameState, handle_event
+from pages import draw_page_map
 
 
 def main_game_loop():
