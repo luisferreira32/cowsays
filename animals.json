@@ -1,0 +1,18 @@
+{
+    "animals": [
+        {
+            "name": "cow",
+            "asset_src": "tmp/cow.webp",
+            "sound_ref_src": "foo.wav",
+            "background_color": "palegreen3",
+            "foreground_color": "black"
+        },
+        {
+            "name": "black cow",
+            "asset_src": "tmp/cow.webp",
+            "sound_ref_src": "foo.wav",
+            "background_color": "black",
+            "foreground_color": "white"
+        }
+    ]
+}

@@ -1,4 +1,5 @@
 import pygame as pg
+import json
 
 pg.init()
 
@@ -10,8 +11,21 @@ from pages import draw_page_map
 
 
 def main_game_loop():
-    # TODO: load animal list from a json config
-    global_game_state = GameState(Recorder(), [Animal("cow", "tmp/cow.webp", consts.BACKGROUND_COLOR, consts.FONT_COLOR)])
+    animals = []
+    with open("animals.json") as f:
+        animals_dict = json.load(f)
+        for animal_dict in animals_dict["animals"]:
+            animals.append(
+                Animal(
+                    animal_dict["name"],
+                    animal_dict["asset_src"],
+                    animal_dict["sound_ref_src"],
+                    pg.Color(animal_dict["background_color"]),
+                    pg.Color(animal_dict["foreground_color"]),
+                )
+            )
+
+    global_game_state = GameState(Recorder(), animals)
 
     while True:
         # process events

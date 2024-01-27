@@ -1,8 +1,9 @@
 import pygame as pg
 from typing import Tuple
 
+
 class Animal:
-    def __init__(self, name: str, asset_src: str, background_color: pg.Color, foreground_color: pg.Color):
+    def __init__(self, name: str, asset_src: str, sound_ref_src: str, background_color: pg.Color, foreground_color: pg.Color):
         self.name = name
         self.asset_src = asset_src
         self.surface_w, self.surface_h = 0, 0

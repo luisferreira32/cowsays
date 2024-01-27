@@ -30,7 +30,7 @@ class GameState:
         shuffle(self.animals)
 
 
-def calculate_similarity(ref: pg.mixer.Sound, recorded: pg.mixer.Sound) -> int:
+def calculate_similarity(ref_path: str, recorded_path: str) -> int:
     # TODO: calculate similarity
     return int(100 * random())
 
