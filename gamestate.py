@@ -16,7 +16,7 @@ class GameState:
         self.animals = animals
         shuffle(self.animals)
 
-        self.current_page = consts.PAGE_SHOW_THE_ANIMAL_RECORDING
+        self.current_page = consts.PAGE_MAIN_MENU
 
         self.score = 0
         self.current_evaluation = 0

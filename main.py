@@ -7,14 +7,8 @@ import consts
 from animal import Animal
 from recorder import Recorder
 from gamestate import GameState
-from pages import MainMenu, page_map
+from pages import MainMenu, ScorePage, RecordingAnimalPage
 
-def clip(surface: pg.Surface, x: int, y: int, x_size: int, y_size: int) -> pg.Surface: #Get a part of the image
-    handle_surface = surface.copy() #Sprite that will get process later
-    clipRect = pg.Rect(x,y,x_size,y_size) #Part of the image
-    handle_surface.set_clip(clipRect) #Clip or you can call cropped
-    image = surface.subsurface(handle_surface.get_clip()) #Get subsurface
-    return image.copy() #Return
 
 def main_game_loop():
     animals = []
@@ -35,6 +29,19 @@ def main_game_loop():
 
     main_menu_page = MainMenu(global_game_state, pg.image.load("assets/sprites/button_start.png"))
 
+    page_map = {
+        consts.PAGE_SHOW_THE_ANIMAL_RECORDING: RecordingAnimalPage(
+            global_game_state.screen_constraints,
+            pg.image.load("assets/sprites/button_rec.png"),
+        ),
+        consts.PAGE_SHOW_THE_ANIMAL_SCORE: ScorePage(
+            global_game_state.screen_constraints,
+            pg.image.load("assets/sprites/button_quit.png"),
+            pg.image.load("assets/sprites/button_next.png"),
+        ),
+        consts.PAGE_MAIN_MENU: MainMenu(global_game_state, pg.image.load("assets/sprites/button_start.png"))
+    }
+
     while True:
         # process events
         for event in pg.event.get():
@@ -43,11 +50,12 @@ def main_game_loop():
 
             if event.type == pg.VIDEORESIZE:
                 global_game_state.resize((event.w, event.h))
-            global_game_state = page_map[global_game_state.current_page].handle_event(event, global_game_state)
+
+            page_map[global_game_state.current_page].handle_event(event, global_game_state)
 
         # draw stuff
-        # draw_page_map[global_game_state.current_page](screen, global_game_state)
-        main_menu_page.draw_page(screen)
+        page_map[global_game_state.current_page].draw_page(screen, global_game_state)
+        # main_menu_page.draw_page(screen)
         pg.display.flip()
 
         # handle real-time calculations
