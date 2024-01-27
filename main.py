@@ -60,8 +60,7 @@ def main_game_loop():
         pg.display.flip()
 
         # handle real-time calculations
-        clock.tick(60)
-
+        global_game_state.update_beam_time(clock.tick(60))
 
 screen = pg.display.set_mode((consts.SCREEN_WIDTH, consts.SCREEN_HEIGHT), pg.RESIZABLE)
 clock = pg.time.Clock()

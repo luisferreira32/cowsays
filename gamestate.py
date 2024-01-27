@@ -17,6 +17,9 @@ class GameState:
         shuffle(self.animals)
 
         self.current_page = consts.PAGE_MAIN_MENU
+        self.next_page = 0
+        self.time_until_beam = 0
+        self.preparing_to_beam = False
 
         self.score = 0
         self.current_evaluation = 0
@@ -33,3 +36,16 @@ class GameState:
         self.screen_constraints_w, self.screen_constraints_h = screen_constraints
         for animal in self.animals:
             animal.resize(screen_constraints)
+
+    def beam_to(self, page: int):
+        self.preparing_to_beam = True
+        self.next_page = page
+        self.time_until_beam = consts.BEAM_TIME
+
+    def update_beam_time(self, delta: int):
+        self.time_until_beam = self.time_until_beam - delta
+        
+        if self.preparing_to_beam and self.time_until_beam <= 0:
+            self.preparing_to_beam = False
+            self.current_page = self.next_page
+

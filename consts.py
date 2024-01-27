@@ -14,3 +14,32 @@ PAGE_SHOW_THE_ANIMAL_SCORE = 2
 PAGE_GAME_OVER = 3
 
 FONT = pg.font.SysFont("Mono", 50)
+
+# Time it takes to transition between pages in miliseconds
+BEAM_TIME = 300
+
+ANIMALS = [
+    "chicken",
+    "cow",
+    "dog",
+    "cat",
+    "elephant",
+    "seal",
+    "giraffe", 
+    "orca",
+    "human",
+    "seagull",
+    ]
+
+ANIMAL_WAVS = {
+    "chicken": "TODO.wav",
+    "cow": "TODO.wav",
+    "dog": "TODO.wav",
+    "cat": "TODO.wav",
+    "elephant": "TODO.wav",
+    "seal": "TODO.wav",
+    "giraffe": "TODO.wav",
+    "orca": "TODO.wav",
+    "human": "TODO.wav",
+    "seagull": "TODO.wav",
+}

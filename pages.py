@@ -54,7 +54,7 @@ class RecordingAnimalPage:
             global_game_state.recorder.stop_recording()
             self.record_button_pressed = False
             global_game_state.current_evaluation = analyze_sound(global_game_state.current_animal.sound_ref_src, "tmp/output.wav")
-            global_game_state.current_page = consts.PAGE_SHOW_THE_ANIMAL_SCORE
+            global_game_state.beam_to(consts.PAGE_SHOW_THE_ANIMAL_SCORE)
         return global_game_state
 
 
@@ -117,16 +117,17 @@ class ScorePage:
         elif (event.type == pg.MOUSEBUTTONUP and self.quit_button_pressed == True) or (event.type == pg.KEYUP and event.key == pg.K_ESCAPE):
             self.quit_button_pressed = False
             global_game_state.score = 0
-            global_game_state.current_page = consts.PAGE_MAIN_MENU
+            global_game_state.beam_to(consts.PAGE_MAIN_MENU)
         elif (event.type == pg.MOUSEBUTTONUP and self.next_button_pressed == True) or (event.type == pg.KEYUP and event.key == pg.K_SPACE):
             self.next_button_pressed = False
             if global_game_state.current_evaluation >= 60:
                 global_game_state.score += 1
                 global_game_state.next_animal()
-                global_game_state.current_page = consts.PAGE_SHOW_THE_ANIMAL_RECORDING
+                global_game_state.beam_to(consts.PAGE_SHOW_THE_ANIMAL_RECORDING)
             else:
                 global_game_state.score = 0
-                global_game_state.current_page = consts.PAGE_GAME_OVER
+                global_game_state.beam_to(consts.PAGE_GAME_OVER)
+                # TODO: show gameover page and reset score on score < 60 and reset there
         return global_game_state
 
 
@@ -152,7 +153,7 @@ class MainMenu:
                 self.isStartButtonPressed = True
         if event.type == pg.MOUSEBUTTONUP and event.button == 1 and self.isStartButtonPressed:
             self.isStartButtonPressed = False
-            state.current_page = consts.PAGE_SHOW_THE_ANIMAL_RECORDING
+            state.beam_to(consts.PAGE_SHOW_THE_ANIMAL_RECORDING)
 
 
 class GameOver:
@@ -167,3 +168,4 @@ class GameOver:
     def handle_event(self, event: pg.event.Event, global_game_state: GameState):
         if (event.type == pg.MOUSEBUTTONDOWN and event.button == 1) or (event.type == pg.KEYDOWN and event.key == pg.K_SPACE):
             global_game_state.current_page = consts.PAGE_MAIN_MENU
+
