@@ -30,7 +30,7 @@ ANIMALS = [
 
 ANIMAL_WAVS = {
     "chicken": "TODO.wav",
-    "cow": "TODO.wav",
+    "cow": "assets/animals_wav/cow.wav",
     "dog": "TODO.wav",
     "cat": "TODO.wav",
     "elephant": "TODO.wav",
