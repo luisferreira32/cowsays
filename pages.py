@@ -5,6 +5,7 @@ from typing import Tuple
 import consts
 
 from gamestate import GameState
+from super_duper_sound_comparison_ai_algorithm import analyze_sound
 
 
 def clip(surface: pg.Surface, x: int, y: int, x_size: int, y_size: int) -> pg.Surface:
@@ -13,11 +14,6 @@ def clip(surface: pg.Surface, x: int, y: int, x_size: int, y_size: int) -> pg.Su
     handle_surface.set_clip(clipRect)
     image = surface.subsurface(handle_surface.get_clip())
     return image.copy()
-
-
-def calculate_similarity(ref_path: str | None, recorded_path: str | None) -> int:
-    # TODO: calculate similarity - import this
-    return int(100 * random())
 
 
 class RecordingAnimalPage:
@@ -57,7 +53,7 @@ class RecordingAnimalPage:
         elif (event.type == pg.MOUSEBUTTONUP and self.record_button_pressed == True) or (event.type == pg.KEYUP and event.key == pg.K_SPACE):
             global_game_state.recorder.stop_recording()
             self.record_button_pressed = False
-            global_game_state.current_evaluation = calculate_similarity(None, None)
+            global_game_state.current_evaluation = analyze_sound(global_game_state.current_animal.sound_ref_src, "tmp/output.wav")
             global_game_state.current_page = consts.PAGE_SHOW_THE_ANIMAL_SCORE
         return global_game_state
 
@@ -126,11 +122,11 @@ class ScorePage:
             self.next_button_pressed = False
             if global_game_state.current_evaluation >= 60:
                 global_game_state.score += 1
+                global_game_state.next_animal()
+                global_game_state.current_page = consts.PAGE_SHOW_THE_ANIMAL_RECORDING
             else:
                 global_game_state.score = 0
-                # TODO: show gameover page and reset score on score < 60 and reset there
-            global_game_state.next_animal()
-            global_game_state.current_page = consts.PAGE_SHOW_THE_ANIMAL_RECORDING
+                global_game_state.current_page = consts.PAGE_GAME_OVER
         return global_game_state
 
 
@@ -148,7 +144,7 @@ class MainMenu:
             screen.blit(self.sprite_start_button_pressed, self.start_button_pressed_rect)
         else:
             screen.blit(self.sprite_start_button_unpressed, self.start_button_unpressed_rect)
-        
+
     def handle_event(self, event: pg.event.Event, state: GameState):
         if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
             print(event)
@@ -157,3 +153,17 @@ class MainMenu:
         if event.type == pg.MOUSEBUTTONUP and event.button == 1 and self.isStartButtonPressed:
             self.isStartButtonPressed = False
             state.current_page = consts.PAGE_SHOW_THE_ANIMAL_RECORDING
+
+
+class GameOver:
+    def __init__(self, global_game_state: GameState, game_over: pg.Surface):
+        self.game_over = game_over
+        self.game_over_rect = game_over.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h / 2))
+
+    def draw_page(self, screen: pg.Surface, global_game_state: GameState):
+        screen.fill("black")
+        screen.blit(self.game_over, self.game_over_rect)
+
+    def handle_event(self, event: pg.event.Event, global_game_state: GameState):
+        if (event.type == pg.MOUSEBUTTONDOWN and event.button == 1) or (event.type == pg.KEYDOWN and event.key == pg.K_SPACE):
+            global_game_state.current_page = consts.PAGE_MAIN_MENU

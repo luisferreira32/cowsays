@@ -7,7 +7,7 @@ import consts
 from animal import Animal
 from recorder import Recorder
 from gamestate import GameState
-from pages import MainMenu, ScorePage, RecordingAnimalPage
+from pages import MainMenu, ScorePage, RecordingAnimalPage, GameOver
 
 
 def main_game_loop():
@@ -39,7 +39,8 @@ def main_game_loop():
             pg.image.load("assets/sprites/button_quit.png"),
             pg.image.load("assets/sprites/button_next.png"),
         ),
-        consts.PAGE_MAIN_MENU: MainMenu(global_game_state, pg.image.load("assets/sprites/button_start.png"))
+        consts.PAGE_MAIN_MENU: MainMenu(global_game_state, pg.image.load("assets/sprites/button_start.png")),
+        consts.PAGE_GAME_OVER: GameOver(global_game_state, pg.image.load("assets/sprites/button_gameover.png")),
     }
 
     while True:

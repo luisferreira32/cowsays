@@ -3,14 +3,14 @@
         {
             "name": "cow",
             "asset_src": "tmp/cow.webp",
-            "sound_ref_src": "foo.wav",
+            "sound_ref_src": "assets/animals_wav/cow.wav",
             "background_color": "palegreen3",
             "foreground_color": "black"
         },
         {
             "name": "other cow",
             "asset_src": "tmp/cow.webp",
-            "sound_ref_src": "foo.wav",
+            "sound_ref_src": "assets/animals_wav/cow.wav",
             "background_color": "white",
             "foreground_color": "black"
         }
