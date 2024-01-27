@@ -17,7 +17,7 @@ class GameState:
         self.animals = animals
         shuffle(self.animals)
 
-        self.current_page = consts.PAGE_SHOW_THE_ANIMAL_SAYS
+        self.current_page = consts.PAGE_SHOW_THE_ANIMAL_RECORDING
 
         self.score = 0
         self.current_evaluation = 0
@@ -28,26 +28,3 @@ class GameState:
         self.current_animal.load_surface(consts.SCREEN_SIZE)
         self.animals.insert(0, self.current_animal)  # Keep cycling the list
         shuffle(self.animals)
-
-
-def calculate_similarity(ref_path: str, recorded_path: str) -> int:
-    # TODO: calculate similarity
-    return int(100 * random())
-
-
-def handle_event(event: pg.event.Event, global_game_state: GameState) -> GameState:
-    if event.type == pg.KEYDOWN and event.key == pg.K_SPACE and global_game_state.current_page == consts.PAGE_SHOW_THE_ANIMAL_SAYS:
-        global_game_state.recorder.start_recording()
-        global_game_state.current_page = consts.PAGE_SHOW_THE_ANIMAL_RECORDING
-    elif event.type == pg.KEYDOWN and event.key == pg.K_SPACE and global_game_state.current_page == consts.PAGE_SHOW_THE_ANIMAL_RECORDING:
-        global_game_state.recorder.stop_recording()
-        global_game_state.current_evaluation = calculate_similarity(None, None)
-        global_game_state.current_page = consts.PAGE_SHOW_THE_ANIMAL_SCORE
-    elif event.type == pg.KEYDOWN and event.key == pg.K_SPACE and global_game_state.current_page == consts.PAGE_SHOW_THE_ANIMAL_SCORE:
-        if global_game_state.current_evaluation >= 60:
-            global_game_state.score += 1
-            # TODO: show gameover page and reset score on score < 60
-        global_game_state.next_animal()
-        global_game_state.current_page = consts.PAGE_SHOW_THE_ANIMAL_SAYS
-
-    return global_game_state

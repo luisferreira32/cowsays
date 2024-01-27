@@ -6,8 +6,8 @@ pg.init()
 import consts
 from animal import Animal
 from recorder import Recorder
-from gamestate import GameState, handle_event
-from pages import draw_page_map
+from gamestate import GameState
+from pages import page_map
 
 
 def main_game_loop():
@@ -32,10 +32,10 @@ def main_game_loop():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return
-            global_game_state = handle_event(event, global_game_state)
+            global_game_state = page_map[global_game_state.current_page].handle_event(event, global_game_state)
 
         # draw stuff
-        draw_page_map[global_game_state.current_page](screen, global_game_state)
+        page_map[global_game_state.current_page].draw_page(screen, global_game_state)
         pg.display.flip()
 
         # handle real-time calculations
