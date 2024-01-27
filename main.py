@@ -39,6 +39,7 @@ def main_game_loop():
             pg.image.load("assets/sprites/button_quit.png"),
             pg.image.load("assets/sprites/button_next.png"),
         ),
+        consts.PAGE_MAIN_MENU: MainMenu(global_game_state, pg.image.load("assets/sprites/button_start.png"))
     }
 
     while True:
@@ -50,7 +51,7 @@ def main_game_loop():
             if event.type == pg.VIDEORESIZE:
                 global_game_state.resize((event.w, event.h))
 
-            global_game_state = page_map[global_game_state.current_page].handle_event(event, global_game_state)
+            page_map[global_game_state.current_page].handle_event(event, global_game_state)
 
         # draw stuff
         page_map[global_game_state.current_page].draw_page(screen, global_game_state)

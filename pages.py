@@ -143,16 +143,18 @@ class MainMenu:
         self.start_button_unpressed_rect = self.sprite_start_button_unpressed.get_rect(center=(state.screen_constraints_w / 2, state.screen_constraints_h / 2))
         self.start_button_pressed_rect = self.sprite_start_button_pressed.get_rect(center=(state.screen_constraints_w / 2, state.screen_constraints_h / 2))
 
-    def draw_page(self, screen: pg.Surface):
+    def draw_page(self, screen: pg.Surface, state: GameState):
         screen.fill(consts.BACKGROUND_COLOR)
         if self.isStartButtonPressed:
             screen.blit(self.sprite_start_button_pressed, self.start_button_pressed_rect)
         else:
             screen.blit(self.sprite_start_button_unpressed, self.start_button_unpressed_rect)
         
-    def hendle_event(self, event: pg.event.Event, state: GameState):
+    def handle_event(self, event: pg.event.Event, state: GameState):
         if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
+            print(event)
             if self.start_button_unpressed_rect.collidepoint(event.pos):
                 self.isStartButtonPressed = True
-        if event.type == pg.MOUSEBUTTONUP and event.button == 1:
+        if event.type == pg.MOUSEBUTTONUP and event.button == 1 and self.isStartButtonPressed:
             self.isStartButtonPressed = False
+            state.current_page = consts.PAGE_SHOW_THE_ANIMAL_RECORDING
