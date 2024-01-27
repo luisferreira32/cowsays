@@ -12,7 +12,7 @@ def clip(surface: pg.Surface, x: int, y: int, x_size: int, y_size: int) -> pg.Su
     image = surface.subsurface(handle_surface.get_clip()) #Get subsurface
     return image.copy() #Return
 
-def calculate_similarity(ref_path: str, recorded_path: str) -> int:
+def calculate_similarity(ref_path: str | None, recorded_path: str | None) -> int:
     # TODO: calculate similarity - import this
     return int(100 * random())
 

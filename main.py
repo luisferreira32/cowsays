@@ -6,7 +6,7 @@ pg.init()
 import consts
 from animal import Animal
 from recorder import Recorder
-from gamestate import GameState, handle_event
+from gamestate import GameState
 from pages import MainMenu, page_map
 
 def clip(surface: pg.Surface, x: int, y: int, x_size: int, y_size: int) -> pg.Surface: #Get a part of the image
