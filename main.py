@@ -17,6 +17,11 @@ SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT = tuple([1800, 1200])
 BACKGROUND_COLOR = (100,200,100)
 FONT_COLOR = (0,0,0)
 
+# Game pages
+PAGE_SHOW_THE_ANIMAL_SAYS = 0
+PAGE_SHOW_THE_ANIMAL_RECORDING = 1
+PAGE_SHOW_THE_ANIMAL_SCORE = 2
+
 class Recorder:
     def __init__(self):
         names = get_audio_device_names(True)
@@ -65,63 +70,93 @@ class GameState:
     def __init__(self, recorder: Recorder, animal_assets_src: List[str], animal_characteristics: List[Tuple[str, pg.Color, pg.Color]]):
         self.recorder = recorder
         self.animal_assets_src = animal_assets_src
+        # TODO: this does not feel right to be a tuple
         self.animal_characteristics = animal_characteristics
-        self.timer_begin = time.time()
-        self.record = True
 
-        self.current_screen = "page_show_the_animal"
+        self.current_page = PAGE_SHOW_THE_ANIMAL_SAYS
+        self.current_animal = self.next_animal()
 
-        first_animal_asset, first_animal_characteristics = self.animal_assets_src.pop(), self.animal_characteristics.pop()
-        first_animal_surface = pg.image.load(first_animal_asset)
-        self.current_animal = Animal(first_animal_characteristics[0], first_animal_surface, first_animal_characteristics[1], first_animal_characteristics[2])
+        # TODO: keep track of similarities > 60%
+        self.score = 0
+        # TODO: calculate this when you stop recording
+        self.current_evaluation = 0
     
     def next_animal(self) -> Animal:
-        first_animal_asset, first_animal_characteristics = self.animal_assets_src.pop(), self.animal_characteristics.pop()
-        first_animal_surface = pg.image.load(first_animal_asset)
-        self.current_animal = Animal(first_animal_characteristics[0], first_animal_surface, first_animal_characteristics[1], first_animal_characteristics[2])
-        return self.current_animal
+        next_animal_asset, next_animal_characteristics = self.animal_assets_src.pop(), self.animal_characteristics.pop()
+        next_animal_surface = pg.image.load(next_animal_asset)
+        next_animal = Animal(next_animal_characteristics[0], next_animal_surface, next_animal_characteristics[1], next_animal_characteristics[2])
+        if next_animal.surface_w != SCREEN_WIDTH*2/4 or next_animal.surface_h != SCREEN_HEIGHT*2/4:
+            next_animal.surface = pg.transform.scale(next_animal.surface, (SCREEN_WIDTH*2/4, SCREEN_HEIGHT*2/4))
+        self.current_animal = next_animal
+        return next_animal
 
-
-def draw_page_show_the_animal(screen : pg.Surface, global_game_state : GameState):
+def draw_page_show_the_animal_says(screen : pg.Surface, global_game_state : GameState):
     animal = global_game_state.current_animal
     screen.fill(animal.background_color)
-
-    if animal.surface_w != SCREEN_WIDTH*2/4 or animal.surface_h != SCREEN_HEIGHT*2/4:
-        animal.surface = pg.transform.scale(animal.surface, (SCREEN_WIDTH*2/4, SCREEN_HEIGHT*2/4))
     screen.blit(animal.surface, (SCREEN_WIDTH*1/4, SCREEN_HEIGHT*1/4))
 
     record_text = font.render(f"The {animal.name} says...", True, FONT_COLOR)
     record_rect = record_text.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT-100))
     screen.blit(record_text, record_rect)
 
-    if global_game_state.record:
-        global_game_state.recorder.start_recording()
-        # record for 5 seconds
-        if (time.time() - global_game_state.timer_begin) > 5:
-            global_game_state.record = False
-        pg.draw.circle(screen, "red", (record_rect.right+40, record_rect.centery-20), 20.0, width=3)
-    else:
-        global_game_state.recorder.stop_recording()
-        pg.draw.circle(screen, FONT_COLOR, (record_rect.right+40, record_rect.centery-20), 20.0, width=3)
 
+def draw_page_show_the_animal_recording(screen : pg.Surface, global_game_state : GameState):
+    animal = global_game_state.current_animal
+    screen.fill(animal.background_color)
+    screen.blit(animal.surface, (SCREEN_WIDTH*1/4, SCREEN_HEIGHT*1/4))
+
+    record_text = font.render(f"Recording your {animal.name} sound", True, FONT_COLOR)
+    record_rect = record_text.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT-100))
+    screen.blit(record_text, record_rect)
+
+def draw_page_show_the_animal_score(screen : pg.Surface, global_game_state : GameState):
+    animal = global_game_state.current_animal
+    screen.fill(animal.background_color)
+    screen.blit(animal.surface, (SCREEN_WIDTH*1/4, SCREEN_HEIGHT*1/4))
+
+    record_text = font.render(f"Your similarity with the {animal.name} is: {global_game_state.current_evaluation}%", True, FONT_COLOR)
+    record_rect = record_text.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT-100))
+    screen.blit(record_text, record_rect)
+
+draw_page_map = {
+    PAGE_SHOW_THE_ANIMAL_SAYS: draw_page_show_the_animal_says,
+    PAGE_SHOW_THE_ANIMAL_RECORDING: draw_page_show_the_animal_recording,
+    PAGE_SHOW_THE_ANIMAL_SCORE: draw_page_show_the_animal_score,
+}
 
 def main_game_loop():
+    # TODO: dynamically load assets and unload them as we move between animals?
+    # TODO: have the colors also in some sort of config file
     global_game_state = GameState(Recorder(), ["tmp/cow.webp"], [("cow", BACKGROUND_COLOR, FONT_COLOR)])
 
+    # TODO: figure something else to do "real-time" fps independent timers
+    recording_time = 0
     while True:
+        # process events
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 the_jam = global_game_state.recorder.mix_sound()
                 the_jam.play()
-                time.sleep(5)
+                # time.sleep(5)
                 return
+            if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                global_game_state.recorder.start_recording()
+                global_game_state.current_page = PAGE_SHOW_THE_ANIMAL_RECORDING
+                # TODO: don't use this variable, figure out something else ?
+                recording_time = 5000
 
-        if global_game_state.current_screen == "page_show_the_animal":
-            draw_page_show_the_animal(screen, global_game_state)
-
+        # draw stuff
+        draw_page_map[global_game_state.current_page](screen, global_game_state)
         pg.display.flip()
 
-        clock.tick(60)  # limits FPS to 60
+        # handle real-time calculations
+        delta_ms = clock.tick(60)
+        if recording_time > 0:
+            recording_time -= delta_ms
+        if recording_time < 0:
+            global_game_state.recorder.stop_recording()
+            recording_time = 0
+            global_game_state.current_page = PAGE_SHOW_THE_ANIMAL_SCORE
 
 
 pg.mixer.pre_init(44100, 32, 2, 512)
