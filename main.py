@@ -1,10 +1,15 @@
 import pygame as pg
-import init
+
+pg.mixer.pre_init(44100, 32, 2, 512)
+pg.init()
+
+
 import consts
 from animal import Animal
 from recorder import Recorder
 from gamestate import GameState
 from pages import handle_event, draw_page_map
+
 
 def main_game_loop():
     # TODO: load animal list from a json config
@@ -23,6 +28,7 @@ def main_game_loop():
 
         # handle real-time calculations
         clock.tick(60)
+
 
 screen = pg.display.set_mode((consts.SCREEN_WIDTH, consts.SCREEN_HEIGHT))
 clock = pg.time.Clock()
