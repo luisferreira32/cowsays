@@ -120,9 +120,27 @@ def draw_page_show_the_animal_score(screen: pg.Surface, global_game_state: GameS
     screen.fill(animal.background_color)
     screen.blit(animal.surface, (SCREEN_WIDTH * 1 / 4, SCREEN_HEIGHT * 1 / 4))
 
-    record_text = font.render(f"Your similarity with the {animal.name} is: {global_game_state.current_evaluation}%", True, FONT_COLOR)
-    record_rect = record_text.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100))
-    screen.blit(record_text, record_rect)
+    score_text = font.render(f"Your similarity with the {animal.name} is: {global_game_state.current_evaluation}%", True, FONT_COLOR)
+    score_rect = score_text.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100))
+    screen.blit(score_text, score_rect)
+
+    feedback_text = font.render(f"You {'rock!' if global_game_state.current_evaluation >= 60 else 'suck...'}", True, FONT_COLOR)
+    feedback_rect = feedback_text.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 50))
+    screen.blit(feedback_text, feedback_rect)
+
+
+def handle_event(event: pg.event.Event, global_game_state: GameState) -> GameState:
+    if event.type == pg.KEYDOWN and event.key == pg.K_SPACE and global_game_state.current_page == PAGE_SHOW_THE_ANIMAL_SAYS:
+        global_game_state.recorder.start_recording()
+        global_game_state.current_page = PAGE_SHOW_THE_ANIMAL_RECORDING
+    if event.type == pg.KEYDOWN and event.key == pg.K_SPACE and global_game_state.current_page == PAGE_SHOW_THE_ANIMAL_RECORDING:
+        global_game_state.recorder.stop_recording()
+        # TODO: calculate similarity
+        global_game_state.current_evaluation = 60
+        global_game_state.current_page = PAGE_SHOW_THE_ANIMAL_SCORE
+    if event.type == pg.KEYDOWN and event.key == pg.K_SPACE and global_game_state.current_page == PAGE_SHOW_THE_ANIMAL_SCORE:
+        global_game_state.current_page = PAGE_SHOW_THE_ANIMAL_SAYS
+    return global_game_state
 
 
 draw_page_map = {
@@ -137,21 +155,12 @@ def main_game_loop():
     # TODO: have the colors also in some sort of config file
     global_game_state = GameState(Recorder(), ["tmp/cow.webp"], [("cow", BACKGROUND_COLOR, FONT_COLOR)])
 
-    # TODO: figure something else to do "real-time" fps independent timers
-    recording_time = 0
     while True:
         # process events
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                the_jam = global_game_state.recorder.mix_sound()
-                the_jam.play()
-                # time.sleep(5)
                 return
-            if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
-                global_game_state.recorder.start_recording()
-                global_game_state.current_page = PAGE_SHOW_THE_ANIMAL_RECORDING
-                # TODO: don't use this variable, figure out something else ?
-                recording_time = 5000
+            global_game_state = handle_event(event, global_game_state)
 
         # draw stuff
         draw_page_map[global_game_state.current_page](screen, global_game_state)
@@ -159,12 +168,6 @@ def main_game_loop():
 
         # handle real-time calculations
         delta_ms = clock.tick(60)
-        if recording_time > 0:
-            recording_time -= delta_ms
-        if recording_time < 0:
-            global_game_state.recorder.stop_recording()
-            recording_time = 0
-            global_game_state.current_page = PAGE_SHOW_THE_ANIMAL_SCORE
 
 
 pg.mixer.pre_init(44100, 32, 2, 512)
