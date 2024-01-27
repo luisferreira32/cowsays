@@ -14,18 +14,20 @@ from pygame._sdl2 import (
 SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT = tuple([1800, 1200])
 
 # Color palet
-BACKGROUND_COLOR = (100,200,100)
-FONT_COLOR = (0,0,0)
+BACKGROUND_COLOR = (100, 200, 100)
+FONT_COLOR = (0, 0, 0)
 
 # Game pages
 PAGE_SHOW_THE_ANIMAL_SAYS = 0
 PAGE_SHOW_THE_ANIMAL_RECORDING = 1
 PAGE_SHOW_THE_ANIMAL_SCORE = 2
 
+
 class Recorder:
     def __init__(self):
         names = get_audio_device_names(True)
         self.sound_chunks = []
+
         def callback(_: AudioDevice, audiomemoryview: memoryview):
             self.sound_chunks.append(bytes(audiomemoryview))
 
@@ -40,7 +42,7 @@ class Recorder:
             callback=callback,
         )
         self.recording = False
-    
+
     def start_recording(self):
         if self.recording:
             return
@@ -54,9 +56,10 @@ class Recorder:
         self.recording = False
         print("paused recording")
         self.audio_device.pause(1)
-    
+
     def mix_sound(self) -> pg.mixer.Sound:
         return pg.mixer.Sound(buffer=b"".join(self.sound_chunks))
+
 
 class Animal:
     def __init__(self, name: str, surface: pg.Surface, background_color: pg.Color, foreground_color: pg.Color):
@@ -65,6 +68,7 @@ class Animal:
         self.surface_w, self.surface_h = surface.get_size()
         self.background_color = background_color
         self.foreground_color = foreground_color
+
 
 class GameState:
     def __init__(self, recorder: Recorder, animal_assets_src: List[str], animal_characteristics: List[Tuple[str, pg.Color, pg.Color]]):
@@ -80,49 +84,53 @@ class GameState:
         self.score = 0
         # TODO: calculate this when you stop recording
         self.current_evaluation = 0
-    
+
     def next_animal(self) -> Animal:
         next_animal_asset, next_animal_characteristics = self.animal_assets_src.pop(), self.animal_characteristics.pop()
         next_animal_surface = pg.image.load(next_animal_asset)
         next_animal = Animal(next_animal_characteristics[0], next_animal_surface, next_animal_characteristics[1], next_animal_characteristics[2])
-        if next_animal.surface_w != SCREEN_WIDTH*2/4 or next_animal.surface_h != SCREEN_HEIGHT*2/4:
-            next_animal.surface = pg.transform.scale(next_animal.surface, (SCREEN_WIDTH*2/4, SCREEN_HEIGHT*2/4))
+        if next_animal.surface_w != SCREEN_WIDTH * 2 / 4 or next_animal.surface_h != SCREEN_HEIGHT * 2 / 4:
+            next_animal.surface = pg.transform.scale(next_animal.surface, (SCREEN_WIDTH * 2 / 4, SCREEN_HEIGHT * 2 / 4))
         self.current_animal = next_animal
         return next_animal
 
-def draw_page_show_the_animal_says(screen : pg.Surface, global_game_state : GameState):
+
+def draw_page_show_the_animal_says(screen: pg.Surface, global_game_state: GameState):
     animal = global_game_state.current_animal
     screen.fill(animal.background_color)
-    screen.blit(animal.surface, (SCREEN_WIDTH*1/4, SCREEN_HEIGHT*1/4))
+    screen.blit(animal.surface, (SCREEN_WIDTH * 1 / 4, SCREEN_HEIGHT * 1 / 4))
 
     record_text = font.render(f"The {animal.name} says...", True, FONT_COLOR)
-    record_rect = record_text.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT-100))
+    record_rect = record_text.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100))
     screen.blit(record_text, record_rect)
 
 
-def draw_page_show_the_animal_recording(screen : pg.Surface, global_game_state : GameState):
+def draw_page_show_the_animal_recording(screen: pg.Surface, global_game_state: GameState):
     animal = global_game_state.current_animal
     screen.fill(animal.background_color)
-    screen.blit(animal.surface, (SCREEN_WIDTH*1/4, SCREEN_HEIGHT*1/4))
+    screen.blit(animal.surface, (SCREEN_WIDTH * 1 / 4, SCREEN_HEIGHT * 1 / 4))
 
     record_text = font.render(f"Recording your {animal.name} sound", True, FONT_COLOR)
-    record_rect = record_text.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT-100))
+    record_rect = record_text.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100))
     screen.blit(record_text, record_rect)
 
-def draw_page_show_the_animal_score(screen : pg.Surface, global_game_state : GameState):
+
+def draw_page_show_the_animal_score(screen: pg.Surface, global_game_state: GameState):
     animal = global_game_state.current_animal
     screen.fill(animal.background_color)
-    screen.blit(animal.surface, (SCREEN_WIDTH*1/4, SCREEN_HEIGHT*1/4))
+    screen.blit(animal.surface, (SCREEN_WIDTH * 1 / 4, SCREEN_HEIGHT * 1 / 4))
 
     record_text = font.render(f"Your similarity with the {animal.name} is: {global_game_state.current_evaluation}%", True, FONT_COLOR)
-    record_rect = record_text.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT-100))
+    record_rect = record_text.get_rect(center=(SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100))
     screen.blit(record_text, record_rect)
+
 
 draw_page_map = {
     PAGE_SHOW_THE_ANIMAL_SAYS: draw_page_show_the_animal_says,
     PAGE_SHOW_THE_ANIMAL_RECORDING: draw_page_show_the_animal_recording,
     PAGE_SHOW_THE_ANIMAL_SCORE: draw_page_show_the_animal_score,
 }
+
 
 def main_game_loop():
     # TODO: dynamically load assets and unload them as we move between animals?
