@@ -1,4 +1,10 @@
+altgraph==0.17.4
+packaging==23.2
+PyAudio==0.2.14
+pydub==0.25.1
 pygame==2.5.2
+pyinstaller==6.3.0
+pyinstaller-hooks-contrib==2024.0
 Wave==0.0.2
 scipy===1.12.0
 numpy===1.23.5
