@@ -32,7 +32,7 @@ def main_game_loop():
     page_map = {
         consts.PAGE_SHOW_THE_ANIMAL_RECORDING: RecordingAnimalPage(
             global_game_state.screen_constraints,
-            pg.image.load("assets/sprites/button_quit.png"),
+            pg.image.load("assets/sprites/button_rec.png"),
         ),
         consts.PAGE_SHOW_THE_ANIMAL_SCORE: ScorePage(
             global_game_state.screen_constraints,

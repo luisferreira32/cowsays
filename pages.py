@@ -24,8 +24,8 @@ class RecordingAnimalPage:
     def __init__(self, screen_constraints: Tuple[int, int], record_button_sprite: pg.Surface) -> None:
         screen_constraints_w, screen_constraints_h = screen_constraints
 
-        self.record_button_sprite_unpressed = pg.transform.scale_by(clip(record_button_sprite, 5, 19, 53, 31), 4)
-        self.record_button_sprite_pressed = pg.transform.scale_by(clip(record_button_sprite, 69, 19, 53, 31), 4)
+        self.record_button_sprite_unpressed = pg.transform.scale_by(clip(record_button_sprite, 20, 9, 24, 35), 4)
+        self.record_button_sprite_pressed = pg.transform.scale_by(clip(record_button_sprite, 84, 9, 24, 35), 4)
         self.record_button_rect = self.record_button_sprite_unpressed.get_rect(center=(screen_constraints_w / 2, screen_constraints_h - 200))
         self.record_button_pressed = False
 
@@ -33,6 +33,10 @@ class RecordingAnimalPage:
         animal = global_game_state.current_animal
         screen.fill(animal.background_color)
         screen.blit(animal.surface, (global_game_state.screen_constraints_w * 1 / 4, global_game_state.screen_constraints_h * 1 / 4))
+
+        score_text = consts.FONT.render(f"Score: {global_game_state.score}", True, animal.foreground_color)
+        score_rect = score_text.get_rect(center=(global_game_state.screen_constraints_w - 300, 50))
+        screen.blit(score_text, score_rect)
 
         record_text = consts.FONT.render(f"The {animal.name} says...", True, animal.foreground_color)
         record_rect = record_text.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h - 100))
@@ -47,10 +51,10 @@ class RecordingAnimalPage:
         )
 
     def handle_event(self, event: pg.event.Event, global_game_state: GameState) -> GameState:
-        if event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+        if (event.type == pg.MOUSEBUTTONDOWN and self.record_button_rect.collidepoint(event.pos)) or (event.type == pg.KEYDOWN and event.key == pg.K_SPACE):
             global_game_state.recorder.start_recording()
             self.record_button_pressed = True
-        elif event.type == pg.KEYUP and event.key == pg.K_SPACE:
+        elif (event.type == pg.MOUSEBUTTONUP and self.record_button_pressed == True) or (event.type == pg.KEYUP and event.key == pg.K_SPACE):
             global_game_state.recorder.stop_recording()
             self.record_button_pressed = False
             global_game_state.current_evaluation = calculate_similarity(None, None)
@@ -77,9 +81,17 @@ class ScorePage:
         screen.fill(animal.background_color)
         screen.blit(animal.surface, (global_game_state.screen_constraints_w * 1 / 4, global_game_state.screen_constraints_h * 1 / 4))
 
-        score_text = consts.FONT.render(f"Your similarity with the {animal.name} is: {global_game_state.current_evaluation}%", True, animal.foreground_color)
-        score_rect = score_text.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h - 100))
+        score_text = consts.FONT.render(f"Score: {global_game_state.score}", True, animal.foreground_color)
+        score_rect = score_text.get_rect(center=(global_game_state.screen_constraints_w - 300, 50))
         screen.blit(score_text, score_rect)
+
+        similarity_score_text = consts.FONT.render(
+            f"Your similarity with the {animal.name} is: {global_game_state.current_evaluation}%", True, animal.foreground_color
+        )
+        similarity_score_rect = similarity_score_text.get_rect(
+            center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h - 100)
+        )
+        screen.blit(similarity_score_text, similarity_score_rect)
 
         feedback_text = consts.FONT.render(f"You {'rock!' if global_game_state.current_evaluation >= 60 else 'suck...'}", True, animal.foreground_color)
         feedback_rect = feedback_text.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h - 50))
@@ -108,13 +120,16 @@ class ScorePage:
             self.next_button_pressed = True
         elif (event.type == pg.MOUSEBUTTONUP and self.quit_button_pressed == True) or (event.type == pg.KEYUP and event.key == pg.K_ESCAPE):
             self.quit_button_pressed = False
+            global_game_state.score = 0
             # TODO: go back to main menu
             global_game_state.current_page = consts.PAGE_SHOW_THE_ANIMAL_RECORDING
         elif (event.type == pg.MOUSEBUTTONUP and self.next_button_pressed == True) or (event.type == pg.KEYUP and event.key == pg.K_SPACE):
             self.next_button_pressed = False
             if global_game_state.current_evaluation >= 60:
                 global_game_state.score += 1
-                # TODO: show gameover page and reset score on score < 60
+            else:
+                global_game_state.score = 0
+                # TODO: show gameover page and reset score on score < 60 and reset there
             global_game_state.next_animal()
             global_game_state.current_page = consts.PAGE_SHOW_THE_ANIMAL_RECORDING
         return global_game_state

@@ -8,11 +8,11 @@
             "foreground_color": "black"
         },
         {
-            "name": "black cow",
+            "name": "other cow",
             "asset_src": "tmp/cow.webp",
             "sound_ref_src": "foo.wav",
-            "background_color": "black",
-            "foreground_color": "white"
+            "background_color": "white",
+            "foreground_color": "black"
         }
     ]
 }
