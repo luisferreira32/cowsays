@@ -49,6 +49,7 @@ def main_game_loop():
 
             if event.type == pg.VIDEORESIZE:
                 global_game_state.resize((event.w, event.h))
+
             global_game_state = page_map[global_game_state.current_page].handle_event(event, global_game_state)
 
         # draw stuff

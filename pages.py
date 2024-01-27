@@ -121,13 +121,23 @@ class ScorePage:
 
 
 class MainMenu:
-    def __init__(self, global_game_state: GameState, start_button_sprite: pg.Surface):
+    def __init__(self, state: GameState, start_button_sprite: pg.Surface):
         self.isStartButtonPressed = False
-        self.game_state = global_game_state
-        self.sprite_start_button_unpressed = clip(start_button_sprite, 5, 19, 53, 31)
+        self.sprite_start_button_unpressed = pg.transform.scale_by(clip(start_button_sprite, 5, 19, 53, 31), 5)
+        self.sprite_start_button_pressed = pg.transform.scale_by(clip(start_button_sprite, 69, 19, 53, 31), 5)
+        self.start_button_unpressed_rect = self.sprite_start_button_unpressed.get_rect(center=(state.screen_constraints_w / 2, state.screen_constraints_h / 2))
+        self.start_button_pressed_rect = self.sprite_start_button_pressed.get_rect(center=(state.screen_constraints_w / 2, state.screen_constraints_h / 2))
 
     def draw_page(self, screen: pg.Surface):
         screen.fill(consts.BACKGROUND_COLOR)
-        screen.blit(
-            pg.transform.scale_by(self.sprite_start_button_unpressed, 5), (self.game_state.screen_constraints_w / 2, self.game_state.screen_constraints_h / 2)
-        )
+        if self.isStartButtonPressed:
+            screen.blit(self.sprite_start_button_pressed, self.start_button_pressed_rect)
+        else:
+            screen.blit(self.sprite_start_button_unpressed, self.start_button_unpressed_rect)
+        
+    def hendle_event(self, event: pg.event.Event, state: GameState):
+        if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
+            if self.start_button_unpressed_rect.collidepoint(event.pos):
+                self.isStartButtonPressed = True
+        if event.type == pg.MOUSEBUTTONUP and event.button == 1:
+            self.isStartButtonPressed = False
