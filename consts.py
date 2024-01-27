@@ -10,5 +10,6 @@ FONT_COLOR = pg.Color("black")
 # Game pages
 PAGE_SHOW_THE_ANIMAL_RECORDING = 0
 PAGE_SHOW_THE_ANIMAL_SCORE = 1
+PAGE_SHOW_MAIN_MENU = 2
 
 FONT = pg.font.SysFont("Mono", 50)
