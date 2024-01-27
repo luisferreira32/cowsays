@@ -41,7 +41,7 @@ def handle_event(event: pg.event.Event, global_game_state: GameState) -> GameSta
         global_game_state.current_page = consts.PAGE_SHOW_THE_ANIMAL_RECORDING
     elif event.type == pg.KEYDOWN and event.key == pg.K_SPACE and global_game_state.current_page == consts.PAGE_SHOW_THE_ANIMAL_RECORDING:
         global_game_state.recorder.stop_recording()
-        global_game_state.current_evaluation = calculate_similarity(None, global_game_state.recorder.mix_sound())
+        global_game_state.current_evaluation = calculate_similarity(None, None)
         global_game_state.current_page = consts.PAGE_SHOW_THE_ANIMAL_SCORE
     elif event.type == pg.KEYDOWN and event.key == pg.K_SPACE and global_game_state.current_page == consts.PAGE_SHOW_THE_ANIMAL_SCORE:
         if global_game_state.current_evaluation >= 60:
