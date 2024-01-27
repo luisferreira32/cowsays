@@ -1,53 +1,45 @@
-import pygame as pg
-from pygame._sdl2 import (
-    get_audio_device_names,
-    AudioDevice,
-    AUDIO_F32,
-    AUDIO_ALLOW_ANY_CHANGE,
-)
+import pyaudio
+import wave, sys
 
-RECORDER_FREQUENCY = 44100
-NUM_CHANNELS = 2
-CHUNK_SIZE = 512
-
-
-def filter_sound(s: pg.mixer.Sound) -> pg.mixer.Sound:
-    return s
+CHUNK = 1024
+FORMAT = pyaudio.paInt16
+CHANNELS = 1 if sys.platform == "darwin" else 2
+RATE = 44100
+RECORD_SECONDS = 5
+WAVE_OUTPUT_FILENAME = "output.wav"
 
 
 class Recorder:
     def __init__(self):
-        names = get_audio_device_names(True)
-        self.sound_chunks = []
-
-        def callback(_: AudioDevice, audiomemoryview: memoryview):
-            self.sound_chunks.append(bytes(audiomemoryview))
-
-        self.audio_device = AudioDevice(
-            devicename=names[0],
-            iscapture=True,
-            frequency=RECORDER_FREQUENCY,
-            audioformat=AUDIO_F32,
-            numchannels=NUM_CHANNELS,
-            chunksize=CHUNK_SIZE,
-            allowed_changes=AUDIO_ALLOW_ANY_CHANGE,
-            callback=callback,
-        )
+        self.port_audio = pyaudio.PyAudio()
         self.recording = False
+        self.sound_chunks = []
 
     def start_recording(self):
         if self.recording:
             return
         self.recording = True
         print("started recording")
-        self.audio_device.pause(0)
+
+        wav_file = wave.open(WAVE_OUTPUT_FILENAME, "wb")
+        wav_file.setnchannels(CHANNELS)
+        wav_file.setsampwidth(self.port_audio.get_sample_size(FORMAT))
+        wav_file.setframerate(RATE)
+        self.wav_file = wav_file
+
+        def callback(in_data: bytes, frame_count, time_info, status):
+            wav_file.writeframes(in_data)
+            return (in_data, pyaudio.paContinue)
+
+        self.stream = self.port_audio.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True, frames_per_buffer=CHUNK, stream_callback=callback)
 
     def stop_recording(self):
         if not self.recording:
             return
         self.recording = False
-        print("paused recording")
-        self.audio_device.pause(1)
+        print("stopped recording")
 
-    def mix_sound(self) -> pg.mixer.Sound:
-        return filter_sound(pg.mixer.Sound(buffer=b"".join(self.sound_chunks)))
+        self.stream.stop_stream()
+        self.stream.close()
+
+        self.wav_file.close()
