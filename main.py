@@ -6,9 +6,15 @@ pg.init()
 import consts
 from animal import Animal
 from recorder import Recorder
-from gamestate import GameState
-from pages import page_map
+from gamestate import GameState, handle_event
+from pages import MainMenu, page_map
 
+def clip(surface: pg.Surface, x: int, y: int, x_size: int, y_size: int) -> pg.Surface: #Get a part of the image
+    handle_surface = surface.copy() #Sprite that will get process later
+    clipRect = pg.Rect(x,y,x_size,y_size) #Part of the image
+    handle_surface.set_clip(clipRect) #Clip or you can call cropped
+    image = surface.subsurface(handle_surface.get_clip()) #Get subsurface
+    return image.copy() #Return
 
 def main_game_loop():
     animals = []
@@ -27,6 +33,8 @@ def main_game_loop():
 
     global_game_state = GameState(Recorder(), animals)
 
+    main_menu_page = MainMenu(global_game_state, pg.image.load("assets/sprites/button_start.png"))
+
     while True:
         # process events
         for event in pg.event.get():
@@ -38,7 +46,8 @@ def main_game_loop():
             global_game_state = page_map[global_game_state.current_page].handle_event(event, global_game_state)
 
         # draw stuff
-        page_map[global_game_state.current_page].draw_page(screen, global_game_state)
+        # draw_page_map[global_game_state.current_page](screen, global_game_state)
+        main_menu_page.draw_page(screen)
         pg.display.flip()
 
         # handle real-time calculations

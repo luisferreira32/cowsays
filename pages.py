@@ -5,6 +5,12 @@ import consts
 
 from gamestate import GameState
 
+def clip(surface: pg.Surface, x: int, y: int, x_size: int, y_size: int) -> pg.Surface: #Get a part of the image
+    handle_surface = surface.copy() #Sprite that will get process later
+    clipRect = pg.Rect(x,y,x_size,y_size) #Part of the image
+    handle_surface.set_clip(clipRect) #Clip or you can call cropped
+    image = surface.subsurface(handle_surface.get_clip()) #Get subsurface
+    return image.copy() #Return
 
 def calculate_similarity(ref_path: str, recorded_path: str) -> int:
     # TODO: calculate similarity - import this
@@ -65,3 +71,15 @@ page_map = {
     consts.PAGE_SHOW_THE_ANIMAL_RECORDING: RecordingAnimalPage(),
     consts.PAGE_SHOW_THE_ANIMAL_SCORE: ScorePage(),
 }
+
+class MainMenu:
+    def __init__(self, global_game_state: GameState, start_button_sprite: pg.Surface):
+        self.isStartButtonPressed = False
+        self.game_state = global_game_state
+        self.sprite_start_button_unpressed = clip(start_button_sprite, 5, 19, 53, 31)
+
+    def draw_page(self, screen: pg.Surface):
+        screen.fill(consts.BACKGROUND_COLOR)
+        screen.blit(pg.transform.scale_by(self.sprite_start_button_unpressed,5), (self.game_state.screen_constraints_w / 2 , self.game_state.screen_constraints_h / 2))
+
+        
