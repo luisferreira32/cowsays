@@ -32,6 +32,9 @@ def main_game_loop():
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return
+
+            if event.type == pg.VIDEORESIZE:
+                global_game_state.resize((event.w, event.h))
             global_game_state = page_map[global_game_state.current_page].handle_event(event, global_game_state)
 
         # draw stuff
@@ -42,7 +45,7 @@ def main_game_loop():
         clock.tick(60)
 
 
-screen = pg.display.set_mode((consts.SCREEN_WIDTH, consts.SCREEN_HEIGHT))
+screen = pg.display.set_mode((consts.SCREEN_WIDTH, consts.SCREEN_HEIGHT), pg.RESIZABLE)
 clock = pg.time.Clock()
 
 main_game_loop()

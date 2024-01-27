@@ -1,6 +1,5 @@
-import pygame as pg
-from random import shuffle, random
-from typing import List
+from random import shuffle
+from typing import List, Tuple
 
 import consts
 
@@ -25,6 +24,12 @@ class GameState:
 
     def next_animal(self) -> None:
         self.current_animal = self.animals.pop()
-        self.current_animal.load_surface(consts.SCREEN_SIZE)
+        self.current_animal.load_surface(self.screen_constraints)
         self.animals.insert(0, self.current_animal)  # Keep cycling the list
         shuffle(self.animals)
+
+    def resize(self, screen_constraints: Tuple[int, int]):
+        self.screen_constraints = screen_constraints
+        self.screen_constraints_w, self.screen_constraints_h = screen_constraints
+        for animal in self.animals:
+            animal.resize(screen_constraints)
