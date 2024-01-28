@@ -2,7 +2,6 @@
     "animals": [
         {
             "name": "chicken",
-            "asset_src": "assets/cow.jpg",
             "pixel_art_src": "assets/animals_pixel/chicken.png",
             "sound_ref_src": "assets/animals_wav/chicken.wav",
             "background_color": "palegreen3",
@@ -10,7 +9,6 @@
         },
         {
             "name": "cow",
-            "asset_src": "assets/cow.jpg",
             "pixel_art_src": "assets/animals_pixel/cow.png",
             "sound_ref_src": "assets/animals_wav/cow.wav",
             "background_color": "palegreen3",
@@ -18,7 +16,6 @@
         },
         {
             "name": "dog",
-            "asset_src": "assets/cow.jpg",
             "pixel_art_src": "assets/animals_pixel/dog.png",
             "sound_ref_src": "assets/animals_wav/chicken.wav",
             "background_color": "palegreen3",
@@ -26,7 +23,6 @@
         },
         {
             "name": "horse",
-            "asset_src": "assets/horse.jpg",
             "pixel_art_src": "assets/animals_pixel/horse.png",
             "sound_ref_src": "assets/animals_wav/cow.wav",
             "background_color": "palegreen3",

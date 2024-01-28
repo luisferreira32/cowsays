@@ -55,7 +55,7 @@ class RecordingAnimalPage:
             global_game_state.recorder.stop_recording()
             self.record_button_pressed = False
             global_game_state.current_evaluation = analyze_sound(global_game_state.current_animal.sound_ref_src, "output.wav")
-            global_game_state.isFillingScoreBar = True
+            global_game_state.is_filling_score_bar = True
             global_game_state.beam_to(consts.PAGE_SHOW_THE_ANIMAL_SCORE)
         return global_game_state
 
@@ -111,7 +111,7 @@ class ScorePage:
             self.rects_score_bar[self.current_score_bar_index],
         )
 
-        if not global_game_state.isFillingScoreBar:
+        if not global_game_state.is_filling_score_bar:
             screen.blit(
                 self.quit_button_sprite_pressed,
                 self.quit_button_rect,
@@ -140,9 +140,9 @@ class ScorePage:
         elif (event.type == pg.MOUSEBUTTONUP and self.next_button_pressed == True) or (event.type == pg.KEYUP and event.key == pg.K_SPACE):
             self.current_score_bar_index = 0
             self.next_button_pressed = False
+            global_game_state.next_animal()
             if global_game_state.current_evaluation >= 60:
                 global_game_state.score += 1
-                global_game_state.next_animal()
                 global_game_state.beam_to(consts.PAGE_SHOW_THE_ANIMAL_RECORDING)
             else:
                 global_game_state.score = 0
@@ -156,13 +156,13 @@ class ScorePage:
         self.next_button_rect = self.next_button_sprite_unpressed.get_rect(center=(screen_constraints_w / 2 + 120, screen_constraints_h * 5 / 6))
 
     def update_timers(self, state: GameState, delta: int):
-        if state.isFillingScoreBar:
+        if state.is_filling_score_bar:
             self.timer_score_bar_update = self.timer_score_bar_update - delta
             if self.timer_score_bar_update <= 0:
                 self.current_score_bar_index += 1
                 self.timer_score_bar_update = consts.TIMER_SCORE_BAR_STEPS
             if self.current_score_bar_index >= int(state.current_evaluation) / 5 - 1:
-                state.isFillingScoreBar = False
+                state.is_filling_score_bar = False
 
 
 class MainMenu:

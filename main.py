@@ -18,7 +18,6 @@ def main_game_loop():
             animals.append(
                 Animal(
                     animal_dict["name"],
-                    animal_dict["asset_src"],
                     animal_dict["pixel_art_src"],
                     animal_dict["sound_ref_src"],
                     pg.Color(animal_dict["background_color"]),
@@ -73,9 +72,8 @@ def main_game_loop():
         global_game_state.update_beam_timer(delta)
         global_game_state.current_animal.update_timers(delta)
         for page in page_map.values():
-            if hasattr(page, 'update_timers'):
+            if hasattr(page, "update_timers"):
                 page.update_timers(global_game_state, delta)
-
 
 
 screen = pg.display.set_mode((consts.SCREEN_WIDTH, consts.SCREEN_HEIGHT), pg.RESIZABLE)

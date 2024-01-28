@@ -5,15 +5,14 @@ import consts
 
 
 class Animal:
-    def __init__(self, name: str, asset_src: str, pixel_art_src: str, sound_ref_src: str, background_color: pg.Color, foreground_color: pg.Color):
+    def __init__(self, name: str, pixel_art_src: str, sound_ref_src: str, background_color: pg.Color, foreground_color: pg.Color):
         self.name = name
-        self.asset_src = asset_src
         self.pixel_art_src = pixel_art_src
         self.sound_ref_src = sound_ref_src
         self.surface_w, self.surface_h = 0, 0
         self.background_color = background_color
         self.foreground_color = foreground_color
-        
+
         self.timer_animal_jump = consts.ANIMAL_JUMP_TIME
         self.is_jumping = False
 
@@ -24,9 +23,7 @@ class Animal:
         self.surface_w, self.surface_h = self.surface.get_size()
         self.loaded = True
         self.resize(screen_constraints)
-        self.rect = self.surface.get_rect(center=(screen_constraints[0] / 2, screen_constraints[1] /2))
-
-        
+        self.rect = self.surface.get_rect(center=(screen_constraints[0] / 2, screen_constraints[1] / 2))
 
     def resize(self, screen_constraints: Tuple[int, int]):
         if not self.loaded:
@@ -40,7 +37,7 @@ class Animal:
         if self.timer_animal_jump <= 0:
             self.timer_animal_jump = consts.ANIMAL_JUMP_TIME
             self.is_jumping = not self.is_jumping
-        if self.is_jumping: 
+        if self.is_jumping:
             self.rect.y = self.rect.y - 2
         else:
             self.rect.y = self.rect.y + 2
