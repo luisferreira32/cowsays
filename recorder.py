@@ -3,7 +3,7 @@ import wave, sys
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
-CHANNELS = 1 if sys.platform == "darwin" else 2
+CHANNELS = 1 # 1 channel is more likely to be supported
 RATE = 44100
 RECORD_SECONDS = 5
 WAVE_OUTPUT_FILENAME = "output.wav"

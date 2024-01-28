@@ -19,6 +19,7 @@ def main_game_loop():
                 Animal(
                     animal_dict["name"],
                     animal_dict["asset_src"],
+                    animal_dict["pixel_art_src"],
                     animal_dict["sound_ref_src"],
                     pg.Color(animal_dict["background_color"]),
                     pg.Color(animal_dict["foreground_color"]),
@@ -70,6 +71,7 @@ def main_game_loop():
         # handle real-time calculations
         delta = clock.tick(60)
         global_game_state.update_beam_timer(delta)
+        global_game_state.current_animal.update_timers(delta)
         for page in page_map.values():
             if hasattr(page, 'update_timers'):
                 page.update_timers(global_game_state, delta)

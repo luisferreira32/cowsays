@@ -1,6 +1,7 @@
 import pygame as pg
 from random import random
 from typing import Tuple
+from os import linesep
 
 import consts
 
@@ -28,14 +29,14 @@ class RecordingAnimalPage:
     def draw_page(self, screen: pg.Surface, global_game_state: GameState):
         animal = global_game_state.current_animal
         screen.fill(animal.background_color)
-        screen.blit(animal.surface, (global_game_state.screen_constraints_w * 1 / 4, global_game_state.screen_constraints_h * 1 / 4))
+        screen.blit(animal.surface, animal.rect)
 
         score_text = consts.FONT.render(f"Score: {global_game_state.score}", True, animal.foreground_color)
         score_rect = score_text.get_rect(center=(global_game_state.screen_constraints_w - 300, 50))
         screen.blit(score_text, score_rect)
 
         record_text = consts.FONT.render(f"The {animal.name} says...", True, animal.foreground_color)
-        record_rect = record_text.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h * 11 / 12))
+        record_rect = record_text.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h * 16 / 17))
         screen.blit(record_text, record_rect)
 
         screen.blit(
@@ -98,16 +99,12 @@ class ScorePage:
         screen.blit(score_text, score_rect)
 
         similarity_score_text = consts.FONT.render(
-            f"Your similarity with the {animal.name} is: {global_game_state.current_evaluation}%", True, animal.foreground_color
+            f"Your similarity with the {animal.name} is: {global_game_state.current_evaluation}%. You {'rock!' if global_game_state.current_evaluation >= 60 else 'suck...'}", True, animal.foreground_color
         )
         similarity_score_rect = similarity_score_text.get_rect(
-            center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h * 11 / 12)
+            center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h * 16 / 17)
         )
         screen.blit(similarity_score_text, similarity_score_rect)
-
-        feedback_text = consts.FONT.render(f"You {'rock!' if global_game_state.current_evaluation >= 60 else 'suck...'}", True, animal.foreground_color)
-        feedback_rect = feedback_text.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h - 50))
-        screen.blit(feedback_text, feedback_rect)
 
         screen.blit(
             self.sprites_score_bar[self.current_score_bar_index],
@@ -187,10 +184,11 @@ class MainMenu:
             screen.blit(self.sprite_start_button_unpressed, self.start_button_unpressed_rect)
 
     def handle_event(self, event: pg.event.Event, state: GameState):
-        if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
-            if self.start_button_unpressed_rect.collidepoint(event.pos):
-                self.is_start_button_pressed = True
-        if event.type == pg.MOUSEBUTTONUP and event.button == 1 and self.is_start_button_pressed:
+        if (event.type == pg.MOUSEBUTTONDOWN and event.button == 1 and self.start_button_unpressed_rect.collidepoint(event.pos)) or (
+            event.type == pg.KEYDOWN and event.key == pg.K_SPACE
+        ):
+            self.is_start_button_pressed = True
+        if (event.type == pg.MOUSEBUTTONUP and event.button == 1 and self.is_start_button_pressed) or (event.type == pg.KEYUP and event.key == pg.K_SPACE):
             self.is_start_button_pressed = False
             state.beam_to(consts.PAGE_SHOW_THE_ANIMAL_RECORDING)
 
@@ -207,9 +205,13 @@ class GameOver:
         self.game_over_rect = self.game_over.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h / 2))
 
         self.sprite_game_over_off = pg.transform.scale_by(clip(game_over, 14, 50, 99, 21), 7)
-        self.rect_game_over_off = self.sprite_game_over_off.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h / 2))
+        self.rect_game_over_off = self.sprite_game_over_off.get_rect(
+            center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h / 2)
+        )
         self.sprite_game_over_on = pg.transform.scale_by(clip(game_over, 142, 50, 99, 21), 7)
-        self.rect_game_over_on = self.sprite_game_over_on.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h / 2))
+        self.rect_game_over_on = self.sprite_game_over_on.get_rect(
+            center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h / 2)
+        )
 
         self.timer_game_over_light = consts.GAME_OVER_BLINK_TIME
         self.isLightOn = False

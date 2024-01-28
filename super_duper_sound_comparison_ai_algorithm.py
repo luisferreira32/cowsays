@@ -37,8 +37,10 @@ def compute_fft(file_path):
     _, data = wavfile.read(file_path)
 
     # Get data for the first channel
-    # We always dismiss the second channel
-    first_channel_data = data[:, 0]
+    first_channel_data = data
+    # We always dismiss the second channel if recording 2 channels
+    if len(data.shape) > 1:
+        first_channel_data = data[:, 0]
 
     # Compute the magnitude spectrum
     magnitude_spectrum = np.abs(first_channel_data)
