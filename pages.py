@@ -162,8 +162,8 @@ class MainMenu:
 
 class GameOver:
     def __init__(self, global_game_state: GameState, game_over: pg.Surface):
-        self.game_over = game_over
-        self.game_over_rect = game_over.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h / 2))
+        self.game_over = pg.transform.scale_by(game_over, 5)
+        self.game_over_rect = self.game_over.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h / 2))
 
     def draw_page(self, screen: pg.Surface, global_game_state: GameState):
         screen.fill("black")

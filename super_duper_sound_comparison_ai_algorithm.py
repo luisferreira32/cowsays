@@ -26,6 +26,9 @@ def analyze_sound(animal_wav_file_path: str, silly_human_sound_wav_file_path: st
     result = min(result, 1.0)
     result = max(result, 0.0)
 
+    if result != result:  # NaN check
+        result = 0.0
+
     return int(100 * result)
 
 

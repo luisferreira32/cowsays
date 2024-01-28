@@ -10,7 +10,7 @@ TODO: add docs (animals.json + assets)
 
 TODO: from release page to running it
 
-## Install from scract
+## Install from scratch
 
 Pre conditions:
 * repository is cloned
