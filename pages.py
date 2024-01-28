@@ -132,15 +132,18 @@ class ScorePage:
 
 
 class MainMenu:
-    def __init__(self, state: GameState, start_button_sprite: pg.Surface):
+    def __init__(self, state: GameState, main_title_sprite: pg.Surface, start_button_sprite: pg.Surface):
+        self.main_title_sprite = pg.transform.scale_by(main_title_sprite, 2)
+        self.main_title_rect = self.main_title_sprite.get_rect(center=(state.screen_constraints_w / 2, state.screen_constraints_h / 4))
         self.isStartButtonPressed = False
         self.sprite_start_button_unpressed = pg.transform.scale_by(clip(start_button_sprite, 5, 19, 53, 31), 5)
         self.sprite_start_button_pressed = pg.transform.scale_by(clip(start_button_sprite, 69, 19, 53, 31), 5)
-        self.start_button_unpressed_rect = self.sprite_start_button_unpressed.get_rect(center=(state.screen_constraints_w / 2, state.screen_constraints_h / 2))
-        self.start_button_pressed_rect = self.sprite_start_button_pressed.get_rect(center=(state.screen_constraints_w / 2, state.screen_constraints_h / 2))
+        self.start_button_unpressed_rect = self.sprite_start_button_unpressed.get_rect(center=(state.screen_constraints_w / 2, 3 * state.screen_constraints_h / 5))
+        self.start_button_pressed_rect = self.sprite_start_button_pressed.get_rect(center=(state.screen_constraints_w / 2, 3 * state.screen_constraints_h / 5))
 
     def draw_page(self, screen: pg.Surface, state: GameState):
         screen.fill(consts.BACKGROUND_COLOR)
+        screen.blit(self.main_title_sprite, self.main_title_rect)
         if self.isStartButtonPressed:
             screen.blit(self.sprite_start_button_pressed, self.start_button_pressed_rect)
         else:

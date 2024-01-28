@@ -27,8 +27,6 @@ def main_game_loop():
 
     global_game_state = GameState(Recorder(), animals)
 
-    main_menu_page = MainMenu(global_game_state, pg.image.load("assets/sprites/button_start.png"))
-
     page_map = {
         consts.PAGE_SHOW_THE_ANIMAL_RECORDING: RecordingAnimalPage(
             global_game_state.screen_constraints,
@@ -39,7 +37,11 @@ def main_game_loop():
             pg.image.load("assets/sprites/button_quit.png"),
             pg.image.load("assets/sprites/button_next.png"),
         ),
-        consts.PAGE_MAIN_MENU: MainMenu(global_game_state, pg.image.load("assets/sprites/button_start.png")),
+        consts.PAGE_MAIN_MENU: MainMenu(
+            global_game_state, 
+            pg.image.load("assets/sprites/cows-say-moo.png"), 
+            pg.image.load("assets/sprites/button_start.png"),
+        ),
         consts.PAGE_GAME_OVER: GameOver(global_game_state, pg.image.load("assets/sprites/button_gameover.png")),
     }
 
