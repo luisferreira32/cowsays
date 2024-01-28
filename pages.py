@@ -76,17 +76,17 @@ class ScorePage:
         for i in range(20):
            sprite = pg.transform.scale_by(clip(sprite_score, 4+i*32, 13, 25, 6), 16) 
            self.sprites_score_bar.append(sprite) 
-           rect = sprite.get_rect(center=(screen_constraints_w / 2, screen_constraints_h * 5 / 6))
+           rect = sprite.get_rect(center=(screen_constraints_w / 2, screen_constraints_h * 9 / 12))
            self.rects_score_bar.append(rect)
 
         self.quit_button_sprite_unpressed = pg.transform.scale_by(clip(quit_button_sprite, 5, 19, 53, 31), 4)
         self.quit_button_sprite_pressed = pg.transform.scale_by(clip(quit_button_sprite, 69, 19, 53, 31), 4)
-        self.quit_button_rect = self.quit_button_sprite_unpressed.get_rect(center=(screen_constraints_w / 2 - 120, screen_constraints_h * 5 / 6))
+        self.quit_button_rect = self.quit_button_sprite_unpressed.get_rect(center=(screen_constraints_w / 2 - 120, screen_constraints_h * 21 / 24))
         self.quit_button_pressed = False
 
         self.next_button_sprite_unpressed = pg.transform.scale_by(clip(next_button_sprite, 5, 19, 53, 31), 4)
         self.next_button_sprite_pressed = pg.transform.scale_by(clip(next_button_sprite, 69, 19, 53, 31), 4)
-        self.next_button_rect = self.quit_button_sprite_unpressed.get_rect(center=(screen_constraints_w / 2 + 120, screen_constraints_h * 5 / 6))
+        self.next_button_rect = self.quit_button_sprite_unpressed.get_rect(center=(screen_constraints_w / 2 + 120, screen_constraints_h * 21 / 24))
         self.next_button_pressed = False
 
     def draw_page(self, screen: pg.Surface, global_game_state: GameState):
@@ -98,34 +98,35 @@ class ScorePage:
         score_rect = score_text.get_rect(center=(global_game_state.screen_constraints_w - 300, 50))
         screen.blit(score_text, score_rect)
 
-        similarity_score_text = consts.FONT.render(
-            f"Your similarity with the {animal.name} is: {global_game_state.current_evaluation}%. You {'rock!' if global_game_state.current_evaluation >= 60 else 'suck...'}", True, animal.foreground_color
-        )
-        similarity_score_rect = similarity_score_text.get_rect(
-            center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h * 16 / 17)
-        )
-        screen.blit(similarity_score_text, similarity_score_rect)
+        # similarity_score_text = consts.FONT.render(
+        #     f"Your similarity with the {animal.name} is: {global_game_state.current_evaluation}%. You {'rock!' if global_game_state.current_evaluation >= 60 else 'suck...'}", True, animal.foreground_color
+        # )
+        # similarity_score_rect = similarity_score_text.get_rect(
+        #     center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h * 16 / 17)
+        # )
+        # screen.blit(similarity_score_text, similarity_score_rect)
 
         screen.blit(
             self.sprites_score_bar[self.current_score_bar_index],
             self.rects_score_bar[self.current_score_bar_index],
         )
 
-        # screen.blit(
-        #     self.quit_button_sprite_pressed,
-        #     self.quit_button_rect,
-        # ) if self.quit_button_pressed else screen.blit(
-        #     self.quit_button_sprite_unpressed,
-        #     self.quit_button_rect,
-        # )
+        if not global_game_state.isFillingScoreBar:
+            screen.blit(
+                self.quit_button_sprite_pressed,
+                self.quit_button_rect,
+            ) if self.quit_button_pressed else screen.blit(
+                self.quit_button_sprite_unpressed,
+                self.quit_button_rect,
+            )
 
-        # screen.blit(
-        #     self.next_button_sprite_pressed,
-        #     self.next_button_rect,
-        # ) if self.next_button_pressed else screen.blit(
-        #     self.next_button_sprite_unpressed,
-        #     self.next_button_rect,
-        # )
+            screen.blit(
+                self.next_button_sprite_pressed,
+                self.next_button_rect,
+            ) if self.next_button_pressed else screen.blit(
+                self.next_button_sprite_unpressed,
+                self.next_button_rect,
+            )
 
     def handle_event(self, event: pg.event.Event, global_game_state: GameState) -> GameState:
         if (event.type == pg.MOUSEBUTTONDOWN and self.quit_button_rect.collidepoint(event.pos)) or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
