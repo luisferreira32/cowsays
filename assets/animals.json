@@ -27,7 +27,7 @@
         {
             "name": "horse",
             "asset_src": "assets/horse.jpg",
-            "pixel_art_src": "assets/animals_pixel/cow.png",
+            "pixel_art_src": "assets/animals_pixel/horse.png",
             "sound_ref_src": "assets/animals_wav/cow.wav",
             "background_color": "palegreen3",
             "foreground_color": "black"
