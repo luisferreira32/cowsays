@@ -29,7 +29,7 @@ class RecordingAnimalPage:
     def draw_page(self, screen: pg.Surface, global_game_state: GameState):
         animal = global_game_state.current_animal
         screen.fill(animal.background_color)
-        screen.blit(animal.surface, (global_game_state.screen_constraints_w * 1 / 4, global_game_state.screen_constraints_h * 1 / 4))
+        screen.blit(animal.surface, animal.rect)
 
         score_text = consts.FONT.render(f"Score: {global_game_state.score}", True, animal.foreground_color)
         score_rect = score_text.get_rect(center=(global_game_state.screen_constraints_w - 300, 50))

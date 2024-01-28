@@ -21,6 +21,11 @@ BEAM_TIME = 300
 # Game over screen blinking time
 GAME_OVER_BLINK_TIME = 500
 
+
+
+
+ANIMAL_JUMP_TIME = 500
+
 ANIMALS = [
     "chicken",
     "cow",
