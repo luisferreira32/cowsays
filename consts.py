@@ -18,6 +18,9 @@ FONT = pg.font.SysFont("Mono", 50)
 # Time it takes to transition between pages in miliseconds
 BEAM_TIME = 300
 
+# Game over screen blinking time
+GAME_OVER_BLINK_TIME = 500
+
 ANIMALS = [
     "chicken",
     "cow",

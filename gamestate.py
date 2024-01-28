@@ -40,7 +40,7 @@ class GameState:
         self.next_page = page
         self.time_until_beam = consts.BEAM_TIME
 
-    def update_beam_time(self, delta: int):
+    def update_beam_timer(self, delta: int):
         self.time_until_beam = self.time_until_beam - delta
 
         if self.preparing_to_beam and self.time_until_beam <= 0:

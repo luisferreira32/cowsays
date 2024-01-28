@@ -180,9 +180,26 @@ class GameOver:
         self.game_over = pg.transform.scale_by(game_over, 5)
         self.game_over_rect = self.game_over.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h / 2))
 
+        self.sprite_game_over_off = pg.transform.scale_by(clip(game_over, 14, 50, 99, 21), 7)
+        self.rect_game_over_off = self.sprite_game_over_off.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h / 2))
+        self.sprite_game_over_on = pg.transform.scale_by(clip(game_over, 142, 50, 99, 21), 7)
+        self.rect_game_over_on = self.sprite_game_over_on.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h / 2))
+
+        self.timer_game_over_light = consts.GAME_OVER_BLINK_TIME
+        self.isLightOn = False
+
+    def update_timers(self, delta: int):
+        self.timer_game_over_light = self.timer_game_over_light - delta
+        if self.timer_game_over_light <= 0:
+            self.timer_game_over_light = consts.GAME_OVER_BLINK_TIME
+            self.isLightOn = not self.isLightOn
+
     def draw_page(self, screen: pg.Surface, global_game_state: GameState):
-        screen.fill("black")
-        screen.blit(self.game_over, self.game_over_rect)
+        screen.fill(consts.BACKGROUND_COLOR)
+        if self.isLightOn:
+            screen.blit(self.sprite_game_over_on, self.rect_game_over_on)
+        else:
+            screen.blit(self.sprite_game_over_off, self.rect_game_over_off)
 
     def handle_event(self, event: pg.event.Event, global_game_state: GameState):
         if (event.type == pg.MOUSEBUTTONDOWN and event.button == 1) or (event.type == pg.KEYDOWN and event.key == pg.K_SPACE):

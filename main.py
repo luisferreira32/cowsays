@@ -67,7 +67,12 @@ def main_game_loop():
         pg.display.flip()
 
         # handle real-time calculations
-        global_game_state.update_beam_time(clock.tick(60))
+        delta = clock.tick(60)
+        global_game_state.update_beam_timer(delta)
+        for page in page_map.values():
+            if hasattr(page, 'update_timers'):
+                page.update_timers(delta)
+
 
 
 screen = pg.display.set_mode((consts.SCREEN_WIDTH, consts.SCREEN_HEIGHT), pg.RESIZABLE)
