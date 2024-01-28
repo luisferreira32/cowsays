@@ -158,10 +158,11 @@ class MainMenu:
             screen.blit(self.sprite_start_button_unpressed, self.start_button_unpressed_rect)
 
     def handle_event(self, event: pg.event.Event, state: GameState):
-        if event.type == pg.MOUSEBUTTONDOWN and event.button == 1:
-            if self.start_button_unpressed_rect.collidepoint(event.pos):
-                self.is_start_button_pressed = True
-        if event.type == pg.MOUSEBUTTONUP and event.button == 1 and self.is_start_button_pressed:
+        if (event.type == pg.MOUSEBUTTONDOWN and event.button == 1 and self.start_button_unpressed_rect.collidepoint(event.pos)) or (
+            event.type == pg.KEYDOWN and event.key == pg.K_SPACE
+        ):
+            self.is_start_button_pressed = True
+        if (event.type == pg.MOUSEBUTTONUP and event.button == 1 and self.is_start_button_pressed) or (event.type == pg.KEYUP and event.key == pg.K_SPACE):
             self.is_start_button_pressed = False
             state.beam_to(consts.PAGE_SHOW_THE_ANIMAL_RECORDING)
 
@@ -178,9 +179,13 @@ class GameOver:
         self.game_over_rect = self.game_over.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h / 2))
 
         self.sprite_game_over_off = pg.transform.scale_by(clip(game_over, 14, 50, 99, 21), 7)
-        self.rect_game_over_off = self.sprite_game_over_off.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h / 2))
+        self.rect_game_over_off = self.sprite_game_over_off.get_rect(
+            center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h / 2)
+        )
         self.sprite_game_over_on = pg.transform.scale_by(clip(game_over, 142, 50, 99, 21), 7)
-        self.rect_game_over_on = self.sprite_game_over_on.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h / 2))
+        self.rect_game_over_on = self.sprite_game_over_on.get_rect(
+            center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h / 2)
+        )
 
         self.timer_game_over_light = consts.GAME_OVER_BLINK_TIME
         self.isLightOn = False
