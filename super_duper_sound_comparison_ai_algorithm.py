@@ -19,14 +19,12 @@ def analyze_sound(animal_wav_file_path: str, silly_human_sound_wav_file_path: st
     animal_human_max = np.max(animal_human_correlation)
 
     analysis = animal_human_max**2.0 / animal_max / human_max
-    print(f"analysis: {analysis}")
 
     # Analysis is always between 0.2 and 0.3 so... we do magic
     result = (analysis - 0.2) * 10.0
-    print("uncapped result", result)
+    print(f"analysis: {analysis}, uncapped result: {result},")
     result = min(result, 1.0)
     result = max(result, 0.0)
-    print(result)
 
     return int(100 * result)
 
