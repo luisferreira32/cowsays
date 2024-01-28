@@ -54,6 +54,7 @@ class RecordingAnimalPage:
             global_game_state.recorder.stop_recording()
             self.record_button_pressed = False
             global_game_state.current_evaluation = analyze_sound(global_game_state.current_animal.sound_ref_src, "output.wav")
+            global_game_state.isFillingScoreBar = True
             global_game_state.beam_to(consts.PAGE_SHOW_THE_ANIMAL_SCORE)
         return global_game_state
 
