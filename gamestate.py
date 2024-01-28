@@ -23,6 +23,7 @@ class GameState:
 
         self.score = 0
         self.current_evaluation = 0
+        self.isFillingScoreBar = False
         self.next_animal()
 
     def next_animal(self) -> None:

@@ -63,8 +63,19 @@ class RecordingAnimalPage:
 
 
 class ScorePage:
-    def __init__(self, screen_constraints: Tuple[int, int], quit_button_sprite: pg.Surface, next_button_sprite: pg.Surface) -> None:
+    def __init__(self, screen_constraints: Tuple[int, int], quit_button_sprite: pg.Surface, next_button_sprite: pg.Surface, sprite_score: pg.Surface) -> None:
         screen_constraints_w, screen_constraints_h = screen_constraints
+
+        self.current_score_bar_index = 0
+        self.timer_score_bar_update = consts.TIMER_SCORE_BAR_STEPS
+
+        self.sprites_score_bar = []
+        self.rects_score_bar = []
+        for i in range(20):
+           sprite = pg.transform.scale_by(clip(sprite_score, 4+i*32, 13, 25, 6), 16) 
+           self.sprites_score_bar.append(sprite) 
+           rect = sprite.get_rect(center=(screen_constraints_w / 2, screen_constraints_h * 5 / 6))
+           self.rects_score_bar.append(rect)
 
         self.quit_button_sprite_unpressed = pg.transform.scale_by(clip(quit_button_sprite, 5, 19, 53, 31), 4)
         self.quit_button_sprite_pressed = pg.transform.scale_by(clip(quit_button_sprite, 69, 19, 53, 31), 4)
@@ -98,20 +109,25 @@ class ScorePage:
         screen.blit(feedback_text, feedback_rect)
 
         screen.blit(
-            self.quit_button_sprite_pressed,
-            self.quit_button_rect,
-        ) if self.quit_button_pressed else screen.blit(
-            self.quit_button_sprite_unpressed,
-            self.quit_button_rect,
+            self.sprites_score_bar[self.current_score_bar_index],
+            self.rects_score_bar[self.current_score_bar_index],
         )
 
-        screen.blit(
-            self.next_button_sprite_pressed,
-            self.next_button_rect,
-        ) if self.next_button_pressed else screen.blit(
-            self.next_button_sprite_unpressed,
-            self.next_button_rect,
-        )
+        # screen.blit(
+        #     self.quit_button_sprite_pressed,
+        #     self.quit_button_rect,
+        # ) if self.quit_button_pressed else screen.blit(
+        #     self.quit_button_sprite_unpressed,
+        #     self.quit_button_rect,
+        # )
+
+        # screen.blit(
+        #     self.next_button_sprite_pressed,
+        #     self.next_button_rect,
+        # ) if self.next_button_pressed else screen.blit(
+        #     self.next_button_sprite_unpressed,
+        #     self.next_button_rect,
+        # )
 
     def handle_event(self, event: pg.event.Event, global_game_state: GameState) -> GameState:
         if (event.type == pg.MOUSEBUTTONDOWN and self.quit_button_rect.collidepoint(event.pos)) or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
@@ -138,6 +154,15 @@ class ScorePage:
         screen_constraints_w, screen_constraints_h = screen_constraints
         self.quit_button_rect = self.quit_button_sprite_unpressed.get_rect(center=(screen_constraints_w / 2 - 120, screen_constraints_h * 5 / 6))
         self.next_button_rect = self.next_button_sprite_unpressed.get_rect(center=(screen_constraints_w / 2 + 120, screen_constraints_h * 5 / 6))
+
+    def update_timers(self, state: GameState, delta: int):
+        if state.isFillingScoreBar:
+            self.timer_score_bar_update = self.timer_score_bar_update - delta
+            if self.timer_score_bar_update <= 0:
+                self.current_score_bar_index += 1
+                self.timer_score_bar_update = consts.TIMER_SCORE_BAR_STEPS
+            if self.current_score_bar_index >= int(state.current_evaluation) / 5 - 1:
+                state.isFillingScoreBar = False
 
 
 class MainMenu:
@@ -188,7 +213,7 @@ class GameOver:
         self.timer_game_over_light = consts.GAME_OVER_BLINK_TIME
         self.isLightOn = False
 
-    def update_timers(self, delta: int):
+    def update_timers(self, state: GameState, delta: int):
         self.timer_game_over_light = self.timer_game_over_light - delta
         if self.timer_game_over_light <= 0:
             self.timer_game_over_light = consts.GAME_OVER_BLINK_TIME

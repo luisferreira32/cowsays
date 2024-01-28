@@ -36,6 +36,7 @@ def main_game_loop():
             global_game_state.screen_constraints,
             pg.image.load("assets/sprites/button_quit.png"),
             pg.image.load("assets/sprites/button_next.png"),
+            pg.image.load("assets/sprites/score_sprite.png"),
         ),
         consts.PAGE_MAIN_MENU: MainMenu(
             global_game_state,
@@ -71,7 +72,7 @@ def main_game_loop():
         global_game_state.update_beam_timer(delta)
         for page in page_map.values():
             if hasattr(page, 'update_timers'):
-                page.update_timers(delta)
+                page.update_timers(global_game_state, delta)
 
 
 
