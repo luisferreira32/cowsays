@@ -1,6 +1,7 @@
 import pygame as pg
 from random import random
 from typing import Tuple
+from os import linesep
 
 import consts
 
@@ -35,7 +36,7 @@ class RecordingAnimalPage:
         screen.blit(score_text, score_rect)
 
         record_text = consts.FONT.render(f"The {animal.name} says...", True, animal.foreground_color)
-        record_rect = record_text.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h * 11 / 12))
+        record_rect = record_text.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h * 16 / 17))
         screen.blit(record_text, record_rect)
 
         screen.blit(
@@ -86,16 +87,12 @@ class ScorePage:
         screen.blit(score_text, score_rect)
 
         similarity_score_text = consts.FONT.render(
-            f"Your similarity with the {animal.name} is: {global_game_state.current_evaluation}%", True, animal.foreground_color
+            f"Your similarity with the {animal.name} is: {global_game_state.current_evaluation}%. You {'rock!' if global_game_state.current_evaluation >= 60 else 'suck...'}", True, animal.foreground_color
         )
         similarity_score_rect = similarity_score_text.get_rect(
-            center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h * 11 / 12)
+            center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h * 16 / 17)
         )
         screen.blit(similarity_score_text, similarity_score_rect)
-
-        feedback_text = consts.FONT.render(f"You {'rock!' if global_game_state.current_evaluation >= 60 else 'suck...'}", True, animal.foreground_color)
-        feedback_rect = feedback_text.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h - 50))
-        screen.blit(feedback_text, feedback_rect)
 
         screen.blit(
             self.quit_button_sprite_pressed,

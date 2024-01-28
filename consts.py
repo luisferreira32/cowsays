@@ -1,7 +1,7 @@
 import pygame as pg
 
 # Screen related sizes
-SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT = (1800, 1200)
+SCREEN_SIZE = SCREEN_WIDTH, SCREEN_HEIGHT = (1400, 1000)
 
 # Color palet
 BACKGROUND_COLOR = pg.Color("palegreen3")
@@ -13,7 +13,7 @@ PAGE_SHOW_THE_ANIMAL_RECORDING = 1
 PAGE_SHOW_THE_ANIMAL_SCORE = 2
 PAGE_GAME_OVER = 3
 
-FONT = pg.font.SysFont("Mono", 50)
+FONT = pg.font.SysFont("Mono", 40)
 
 # Time it takes to transition between pages in miliseconds
 BEAM_TIME = 300
