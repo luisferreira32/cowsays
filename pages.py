@@ -74,10 +74,10 @@ class ScorePage:
         self.sprites_score_bar = []
         self.rects_score_bar = []
         for i in range(20):
-           sprite = pg.transform.scale_by(clip(sprite_score, 4+i*32, 13, 25, 6), 16) 
-           self.sprites_score_bar.append(sprite) 
-           rect = sprite.get_rect(center=(screen_constraints_w / 2, screen_constraints_h * 9 / 12))
-           self.rects_score_bar.append(rect)
+            sprite = pg.transform.scale_by(clip(sprite_score, 4 + i * 32, 13, 25, 6), 16)
+            self.sprites_score_bar.append(sprite)
+            rect = sprite.get_rect(center=(screen_constraints_w / 2, screen_constraints_h * 9 / 12))
+            self.rects_score_bar.append(rect)
 
         self.quit_button_sprite_unpressed = pg.transform.scale_by(clip(quit_button_sprite, 5, 19, 53, 31), 4)
         self.quit_button_sprite_pressed = pg.transform.scale_by(clip(quit_button_sprite, 69, 19, 53, 31), 4)
@@ -138,6 +138,7 @@ class ScorePage:
             global_game_state.score = 0
             global_game_state.beam_to(consts.PAGE_MAIN_MENU)
         elif (event.type == pg.MOUSEBUTTONUP and self.next_button_pressed == True) or (event.type == pg.KEYUP and event.key == pg.K_SPACE):
+            self.current_score_bar_index = 0
             self.next_button_pressed = False
             if global_game_state.current_evaluation >= 60:
                 global_game_state.score += 1
