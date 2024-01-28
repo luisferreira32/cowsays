@@ -2,35 +2,35 @@
     "animals": [
         {
             "name": "alpaca",
-            "asset_src": "tmp/cow.webp",
+            "asset_src": "assets/cow.jpg",
             "sound_ref_src": "assets/animals_wav/alpaca.wav",
             "background_color": "chartreuse3",
             "foreground_color": "black"
         },
         {
             "name": "chicken",
-            "asset_src": "tmp/cow.webp",
+            "asset_src": "assets/cow.jpg",
             "sound_ref_src": "assets/animals_wav/chicken.wav",
             "background_color": "chartreuse4",
             "foreground_color": "black"
         },
         {
             "name": "cow",
-            "asset_src": "tmp/cow.webp",
+            "asset_src": "assets/cow.jpg",
             "sound_ref_src": "assets/animals_wav/cow.wav",
             "background_color": "palegreen3",
             "foreground_color": "black"
         },
         {
             "name": "goat",
-            "asset_src": "tmp/cow.webp",
+            "asset_src": "assets/cow.jpg",
             "sound_ref_src": "assets/animals_wav/goat.wav",
             "background_color": "palegreen4",
             "foreground_color": "black"
         },
         {
             "name": "sheep",
-            "asset_src": "tmp/cow.webp",
+            "asset_src": "assets/cow.jpg",
             "sound_ref_src": "assets/animals_wav/sheep.wav",
             "background_color": "palegreen1",
             "foreground_color": "black"

@@ -12,7 +12,7 @@ from pages import MainMenu, ScorePage, RecordingAnimalPage, GameOver
 
 def main_game_loop():
     animals = []
-    with open("animals.json") as f:
+    with open("assets/animals.json") as f:
         animals_dict = json.load(f)
         for animal_dict in animals_dict["animals"]:
             animals.append(
@@ -38,8 +38,8 @@ def main_game_loop():
             pg.image.load("assets/sprites/button_next.png"),
         ),
         consts.PAGE_MAIN_MENU: MainMenu(
-            global_game_state, 
-            pg.image.load("assets/sprites/cows-say-moo.png"), 
+            global_game_state,
+            pg.image.load("assets/sprites/cows-say-moo.png"),
             pg.image.load("assets/sprites/button_start.png"),
         ),
         consts.PAGE_GAME_OVER: GameOver(global_game_state, pg.image.load("assets/sprites/button_gameover.png")),
@@ -63,6 +63,7 @@ def main_game_loop():
 
         # handle real-time calculations
         global_game_state.update_beam_time(clock.tick(60))
+
 
 screen = pg.display.set_mode((consts.SCREEN_WIDTH, consts.SCREEN_HEIGHT), pg.RESIZABLE)
 clock = pg.time.Clock()

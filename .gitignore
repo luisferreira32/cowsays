@@ -2,3 +2,8 @@ venv/
 tmp/
 .vscode/
 __pycache__/
+build/
+dist/
+*.spec
+*.tar.gz
+output.wav

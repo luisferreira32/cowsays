@@ -53,7 +53,7 @@ class RecordingAnimalPage:
         elif (event.type == pg.MOUSEBUTTONUP and self.record_button_pressed == True) or (event.type == pg.KEYUP and event.key == pg.K_SPACE):
             global_game_state.recorder.stop_recording()
             self.record_button_pressed = False
-            global_game_state.current_evaluation = analyze_sound(global_game_state.current_animal.sound_ref_src, "tmp/output.wav")
+            global_game_state.current_evaluation = analyze_sound(global_game_state.current_animal.sound_ref_src, "output.wav")
             global_game_state.beam_to(consts.PAGE_SHOW_THE_ANIMAL_SCORE)
         return global_game_state
 
