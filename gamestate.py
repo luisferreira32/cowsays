@@ -34,8 +34,6 @@ class GameState:
     def resize(self, screen_constraints: Tuple[int, int]):
         self.screen_constraints = screen_constraints
         self.screen_constraints_w, self.screen_constraints_h = screen_constraints
-        for animal in self.animals:
-            animal.resize(screen_constraints)
 
     def beam_to(self, page: int):
         self.preparing_to_beam = True
@@ -44,8 +42,7 @@ class GameState:
 
     def update_beam_time(self, delta: int):
         self.time_until_beam = self.time_until_beam - delta
-        
+
         if self.preparing_to_beam and self.time_until_beam <= 0:
             self.preparing_to_beam = False
             self.current_page = self.next_page
-

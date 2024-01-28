@@ -22,7 +22,7 @@ class RecordingAnimalPage:
 
         self.record_button_sprite_unpressed = pg.transform.scale_by(clip(record_button_sprite, 20, 9, 24, 35), 4)
         self.record_button_sprite_pressed = pg.transform.scale_by(clip(record_button_sprite, 84, 9, 24, 35), 4)
-        self.record_button_rect = self.record_button_sprite_unpressed.get_rect(center=(screen_constraints_w / 2, screen_constraints_h - 200))
+        self.record_button_rect = self.record_button_sprite_unpressed.get_rect(center=(screen_constraints_w / 2, screen_constraints_h * 5 / 6))
         self.record_button_pressed = False
 
     def draw_page(self, screen: pg.Surface, global_game_state: GameState):
@@ -35,7 +35,7 @@ class RecordingAnimalPage:
         screen.blit(score_text, score_rect)
 
         record_text = consts.FONT.render(f"The {animal.name} says...", True, animal.foreground_color)
-        record_rect = record_text.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h - 100))
+        record_rect = record_text.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h * 11 / 12))
         screen.blit(record_text, record_rect)
 
         screen.blit(
@@ -57,6 +57,10 @@ class RecordingAnimalPage:
             global_game_state.beam_to(consts.PAGE_SHOW_THE_ANIMAL_SCORE)
         return global_game_state
 
+    def resize(self, screen_constraints: Tuple[int, int]):
+        screen_constraints_w, screen_constraints_h = screen_constraints
+        self.record_button_rect = self.record_button_sprite_unpressed.get_rect(center=(screen_constraints_w / 2, screen_constraints_h * 5 / 6))
+
 
 class ScorePage:
     def __init__(self, screen_constraints: Tuple[int, int], quit_button_sprite: pg.Surface, next_button_sprite: pg.Surface) -> None:
@@ -64,12 +68,12 @@ class ScorePage:
 
         self.quit_button_sprite_unpressed = pg.transform.scale_by(clip(quit_button_sprite, 5, 19, 53, 31), 4)
         self.quit_button_sprite_pressed = pg.transform.scale_by(clip(quit_button_sprite, 69, 19, 53, 31), 4)
-        self.quit_button_rect = self.quit_button_sprite_unpressed.get_rect(center=(screen_constraints_w / 2 - 120, screen_constraints_h - 200))
+        self.quit_button_rect = self.quit_button_sprite_unpressed.get_rect(center=(screen_constraints_w / 2 - 120, screen_constraints_h * 5 / 6))
         self.quit_button_pressed = False
 
         self.next_button_sprite_unpressed = pg.transform.scale_by(clip(next_button_sprite, 5, 19, 53, 31), 4)
         self.next_button_sprite_pressed = pg.transform.scale_by(clip(next_button_sprite, 69, 19, 53, 31), 4)
-        self.next_button_rect = self.quit_button_sprite_unpressed.get_rect(center=(screen_constraints_w / 2 + 120, screen_constraints_h - 200))
+        self.next_button_rect = self.quit_button_sprite_unpressed.get_rect(center=(screen_constraints_w / 2 + 120, screen_constraints_h * 5 / 6))
         self.next_button_pressed = False
 
     def draw_page(self, screen: pg.Surface, global_game_state: GameState):
@@ -85,7 +89,7 @@ class ScorePage:
             f"Your similarity with the {animal.name} is: {global_game_state.current_evaluation}%", True, animal.foreground_color
         )
         similarity_score_rect = similarity_score_text.get_rect(
-            center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h - 100)
+            center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h * 11 / 12)
         )
         screen.blit(similarity_score_text, similarity_score_rect)
 
@@ -130,6 +134,11 @@ class ScorePage:
                 # TODO: show gameover page and reset score on score < 60 and reset there
         return global_game_state
 
+    def resize(self, screen_constraints: Tuple[int, int]):
+        screen_constraints_w, screen_constraints_h = screen_constraints
+        self.quit_button_rect = self.quit_button_sprite_unpressed.get_rect(center=(screen_constraints_w / 2 - 120, screen_constraints_h * 5 / 6))
+        self.next_button_rect = self.next_button_sprite_unpressed.get_rect(center=(screen_constraints_w / 2 + 120, screen_constraints_h * 5 / 6))
+
 
 class MainMenu:
     def __init__(self, state: GameState, main_title_sprite: pg.Surface, start_button_sprite: pg.Surface):
@@ -159,6 +168,12 @@ class MainMenu:
             self.is_start_button_pressed = False
             state.beam_to(consts.PAGE_SHOW_THE_ANIMAL_RECORDING)
 
+    def resize(self, screen_constraints: Tuple[int, int]):
+        screen_constraints_w, screen_constraints_h = screen_constraints
+        self.main_title_rect = self.main_title_sprite.get_rect(center=(screen_constraints_w / 2, screen_constraints_h / 4))
+        self.start_button_unpressed_rect = self.sprite_start_button_unpressed.get_rect(center=(screen_constraints_w / 2, 3 * screen_constraints_h / 5))
+        self.start_button_pressed_rect = self.sprite_start_button_pressed.get_rect(center=(screen_constraints_w / 2, 3 * screen_constraints_h / 5))
+
 
 class GameOver:
     def __init__(self, global_game_state: GameState, game_over: pg.Surface):
@@ -172,3 +187,7 @@ class GameOver:
     def handle_event(self, event: pg.event.Event, global_game_state: GameState):
         if (event.type == pg.MOUSEBUTTONDOWN and event.button == 1) or (event.type == pg.KEYDOWN and event.key == pg.K_SPACE):
             global_game_state.current_page = consts.PAGE_MAIN_MENU
+
+    def resize(self, screen_constraints: Tuple[int, int]):
+        screen_constraints_w, screen_constraints_h = screen_constraints
+        self.game_over_rect = self.game_over.get_rect(center=(screen_constraints_w / 2, screen_constraints_h / 2))

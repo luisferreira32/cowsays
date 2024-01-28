@@ -42,7 +42,10 @@ def main_game_loop():
             pg.image.load("assets/sprites/cows-say-moo.png"),
             pg.image.load("assets/sprites/button_start.png"),
         ),
-        consts.PAGE_GAME_OVER: GameOver(global_game_state, pg.image.load("assets/sprites/button_gameover.png")),
+        consts.PAGE_GAME_OVER: GameOver(
+            global_game_state,
+            pg.image.load("assets/sprites/button_gameover.png"),
+        ),
     }
 
     while True:
@@ -53,6 +56,8 @@ def main_game_loop():
 
             if event.type == pg.VIDEORESIZE:
                 global_game_state.resize((event.w, event.h))
+                for _, p in page_map.items():
+                    p.resize((event.w, event.h))
 
             page_map[global_game_state.current_page].handle_event(event, global_game_state)
 
