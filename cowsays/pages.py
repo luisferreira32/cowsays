@@ -43,13 +43,9 @@ class RecordingAnimalPage(GamePage):
         screen.fill(animal.background_color)
         screen.blit(animal.surface, animal.rect)
 
-        score_text = consts.FONT.render(f"Score: {global_game_state.score}", True, animal.foreground_color)
-        score_rect = score_text.get_rect(center=(global_game_state.screen_constraints_w - 300, 50))
+        score_text = consts.FONT.render(f"{global_game_state.score}", True, animal.foreground_color)
+        score_rect = score_text.get_rect(center=(global_game_state.screen_constraints_w - 50, 50))
         screen.blit(score_text, score_rect)
-
-        record_text = consts.FONT.render(f"The {animal.name} says...", True, animal.foreground_color)
-        record_rect = record_text.get_rect(center=(global_game_state.screen_constraints_w / 2, global_game_state.screen_constraints_h * 16 / 17))
-        screen.blit(record_text, record_rect)
 
         screen.blit(self.record_button_sprite_pressed if self.record_button_pressed else self.record_button_sprite_unpressed, self.record_button_rect)
 
@@ -90,8 +86,8 @@ class ScorePage(GamePage):
         screen.fill(animal.background_color)
         screen.blit(animal.surface, animal.rect)
 
-        score_text = consts.FONT.render(f"Score: {game_state.score}", True, animal.foreground_color)
-        score_rect = score_text.get_rect(center=(game_state.screen_constraints_w - 300, 50))
+        score_text = consts.FONT.render(f"{game_state.score}", True, animal.foreground_color)
+        score_rect = score_text.get_rect(center=(game_state.screen_constraints_w - 50, 50))
         screen.blit(score_text, score_rect)
 
         screen.blit(
