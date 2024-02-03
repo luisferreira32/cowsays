@@ -1,7 +1,7 @@
 import pygame as pg
 from typing import Tuple
 
-import consts
+from cowsays import consts
 
 
 class Animal:
@@ -16,21 +16,13 @@ class Animal:
         self.timer_animal_jump = consts.ANIMAL_JUMP_TIME
         self.is_jumping = False
 
-        self.loaded = False
-
     def load_surface(self, screen_constraints: Tuple[int, int]):
         self.surface = pg.image.load(self.pixel_art_src)
         self.surface_w, self.surface_h = self.surface.get_size()
-        self.loaded = True
-        self.resize(screen_constraints)
         self.rect = self.surface.get_rect(center=(screen_constraints[0] / 2, screen_constraints[1] / 2))
 
     def resize(self, screen_constraints: Tuple[int, int]):
-        if not self.loaded:
-            return
-        if self.surface_w != screen_constraints[0] * 2 / 4 or self.surface_h != screen_constraints[1] * 2 / 4:
-            self.surface = pg.transform.scale(self.surface, (screen_constraints[0] * 2 / 4, screen_constraints[1] * 2 / 4))
-            self.surface_w, self.surface_h = self.surface.get_size()
+        self.rect = self.surface.get_rect(center=(screen_constraints[0] / 2, screen_constraints[1] / 2))
 
     def update_timers(self, delta: int):
         self.timer_animal_jump = self.timer_animal_jump - delta

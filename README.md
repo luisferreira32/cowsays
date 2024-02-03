@@ -6,6 +6,10 @@ Maybe not... A game created during CCJ 2024!
 
 TODO: add docs (animals.json + assets)
 
+## Contributing
+
+TODO: contrib docs (linter + formatter + overall rules)
+
 ## Installing
 
 TODO: from release page to running it
@@ -23,9 +27,6 @@ cp -R assets/ dist/assets/
 tar -zcvf cowsays.tar.gz dist/
 ```
 ### Windows
-```
-pyinstaller --noconsole --onefile main.py
-# copy assets over to dist/assets/
-# zip it
-```
+
+### MacOS
 

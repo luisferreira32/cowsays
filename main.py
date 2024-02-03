@@ -1,13 +1,14 @@
 import pygame as pg
 import json
 
+from typing import Mapping
+
 pg.init()
 
-import consts
-from animal import Animal
-from recorder import Recorder
-from gamestate import GameState
-from pages import MainMenu, ScorePage, RecordingAnimalPage, GameOver
+from cowsays import consts  # noqa: E402
+from cowsays.animal import Animal  # noqa: E402
+from cowsays.gamestate import GlobalGameState  # noqa: E402
+from cowsays.pages import GamePage, MainMenu, ScorePage, RecordingAnimalPage, GameOver  # noqa: E402
 
 
 def main_game_loop():
@@ -25,26 +26,26 @@ def main_game_loop():
                 )
             )
 
-    global_game_state = GameState(Recorder(), animals)
+    game_state = GlobalGameState(consts.SCREEN_SIZE, animals)
 
-    page_map = {
+    page_map: Mapping[int, GamePage] = {
         consts.PAGE_SHOW_THE_ANIMAL_RECORDING: RecordingAnimalPage(
-            global_game_state.screen_constraints,
+            consts.SCREEN_SIZE,
             pg.image.load("assets/sprites/button_rec.png"),
         ),
         consts.PAGE_SHOW_THE_ANIMAL_SCORE: ScorePage(
-            global_game_state.screen_constraints,
+            consts.SCREEN_SIZE,
             pg.image.load("assets/sprites/button_quit.png"),
             pg.image.load("assets/sprites/button_next.png"),
             pg.image.load("assets/sprites/score_sprite.png"),
         ),
         consts.PAGE_MAIN_MENU: MainMenu(
-            global_game_state,
+            consts.SCREEN_SIZE,
             pg.image.load("assets/sprites/cows-say-moo.png"),
             pg.image.load("assets/sprites/button_start.png"),
         ),
         consts.PAGE_GAME_OVER: GameOver(
-            global_game_state,
+            consts.SCREEN_SIZE,
             pg.image.load("assets/sprites/button_gameover.png"),
         ),
     }
@@ -56,24 +57,22 @@ def main_game_loop():
                 return
 
             if event.type == pg.VIDEORESIZE:
-                global_game_state.resize((event.w, event.h))
-                for _, p in page_map.items():
+                game_state.resize((event.w, event.h))
+                for p in page_map.values():
                     p.resize((event.w, event.h))
 
-            page_map[global_game_state.current_page].handle_event(event, global_game_state)
+            if not game_state.preparing_to_beam:
+                page_map[game_state.current_page].handle_event(event, game_state)
 
         # draw stuff
-        page_map[global_game_state.current_page].draw_page(screen, global_game_state)
-        # main_menu_page.draw_page(screen)
+        page_map[game_state.current_page].draw_page(screen, game_state)
         pg.display.flip()
 
         # handle real-time calculations
         delta = clock.tick(60)
-        global_game_state.update_beam_timer(delta)
-        global_game_state.current_animal.update_timers(delta)
-        for page in page_map.values():
-            if hasattr(page, "update_timers"):
-                page.update_timers(global_game_state, delta)
+        game_state.update_timers(delta)
+        for p in page_map.values():
+            p.update_timers(game_state, delta)
 
 
 screen = pg.display.set_mode((consts.SCREEN_WIDTH, consts.SCREEN_HEIGHT), pg.RESIZABLE)
