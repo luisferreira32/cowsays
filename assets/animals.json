@@ -3,30 +3,22 @@
         {
             "name": "chicken",
             "pixel_art_src": "assets/animals_pixel/chicken.png",
-            "sound_ref_src": "assets/animals_wav/chicken.wav",
-            "background_color": "palegreen3",
-            "foreground_color": "black"
+            "sound_ref_src": "assets/animals_wav/chicken.wav"
         },
         {
             "name": "cow",
             "pixel_art_src": "assets/animals_pixel/cow.png",
-            "sound_ref_src": "assets/animals_wav/cow.wav",
-            "background_color": "palegreen3",
-            "foreground_color": "black"
+            "sound_ref_src": "assets/animals_wav/cow.wav"
         },
         {
             "name": "dog",
             "pixel_art_src": "assets/animals_pixel/dog.png",
-            "sound_ref_src": "assets/animals_wav/chicken.wav",
-            "background_color": "palegreen3",
-            "foreground_color": "black"
+            "sound_ref_src": "assets/animals_wav/chicken.wav"
         },
         {
             "name": "horse",
             "pixel_art_src": "assets/animals_pixel/horse.png",
-            "sound_ref_src": "assets/animals_wav/cow.wav",
-            "background_color": "palegreen3",
-            "foreground_color": "black"
+            "sound_ref_src": "assets/animals_wav/cow.wav"
         }
     ]
 }

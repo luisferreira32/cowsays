@@ -40,10 +40,10 @@ class RecordingAnimalPage(GamePage):
 
     def draw_page(self, screen: pg.Surface, global_game_state: GlobalGameState):
         animal = global_game_state.current_animal
-        screen.fill(animal.background_color)
+        screen.fill(consts.BACKGROUND_COLOR)
         screen.blit(animal.surface, animal.rect)
 
-        score_text = consts.FONT.render(f"{global_game_state.score}", True, animal.foreground_color)
+        score_text = consts.FONT.render(f"{global_game_state.score}", True, consts.FONT_COLOR)
         score_rect = score_text.get_rect(center=(global_game_state.screen_constraints_w - 50, 50))
         screen.blit(score_text, score_rect)
 
@@ -83,10 +83,10 @@ class ScorePage(GamePage):
 
     def draw_page(self, screen: pg.Surface, game_state: GlobalGameState):
         animal = game_state.current_animal
-        screen.fill(animal.background_color)
+        screen.fill(consts.BACKGROUND_COLOR)
         screen.blit(animal.surface, animal.rect)
 
-        score_text = consts.FONT.render(f"{game_state.score}", True, animal.foreground_color)
+        score_text = consts.FONT.render(f"{game_state.score}", True, consts.FONT_COLOR)
         score_rect = score_text.get_rect(center=(game_state.screen_constraints_w - 50, 50))
         screen.blit(score_text, score_rect)
 

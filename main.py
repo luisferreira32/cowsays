@@ -21,8 +21,6 @@ def main_game_loop():
                     animal_dict["name"],
                     animal_dict["pixel_art_src"],
                     animal_dict["sound_ref_src"],
-                    pg.Color(animal_dict["background_color"]),
-                    pg.Color(animal_dict["foreground_color"]),
                 )
             )
 

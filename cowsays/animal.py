@@ -5,13 +5,11 @@ from cowsays import consts
 
 
 class Animal:
-    def __init__(self, name: str, pixel_art_src: str, sound_ref_src: str, background_color: pg.Color, foreground_color: pg.Color):
+    def __init__(self, name: str, pixel_art_src: str, sound_ref_src: str):
         self.name = name
         self.pixel_art_src = pixel_art_src
         self.sound_ref_src = sound_ref_src
         self.surface_w, self.surface_h = 0, 0
-        self.background_color = background_color
-        self.foreground_color = foreground_color
 
         self.timer_animal_jump = consts.ANIMAL_JUMP_TIME
         self.is_jumping = False
